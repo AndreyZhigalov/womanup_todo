@@ -1,0 +1,35 @@
+@import '../../services.scss';
+
+.register_page {
+  @include flexCenter('column');
+  height: 100%;
+  width: 100%;
+  background-color: $background-color;
+  .wrapper {
+    @include flexCenter('column');
+    gap: 15px;
+    background-color: $card-block-background-color;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: $box-shadow;
+    h1 {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+    input {
+      height: 50px;
+      width: 400px;
+      box-shadow: $box-shadow;
+      border-radius: 10px;
+      padding-left: 20px;
+    }
+    button {
+        cursor: pointer;
+      padding: 5px 10px;
+      font-size: 24px;
+      background-color: $background-color;
+      box-shadow: $box-shadow;
+      border-radius: 5px;
+    }
+  }
+}

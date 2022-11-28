@@ -1,0 +1,39 @@
+@import '../../services.scss';
+
+.sidebar {
+  position: fixed;
+  width: 100%;
+  max-width: 240px;
+  height: 100%;
+  border-right: 3px solid rgb(242, 242, 242);
+  grid-area: sidebar;
+  padding: 20px 10px 20px 30px;
+  display: flex;
+  flex-direction: column;
+  .logo {
+    span {
+      font-size: 20px;
+    }
+  }
+  .nav_panel {
+    padding: 30px 0;
+    flex: 1;
+    @include flexBetween('column');
+  }
+  ul {
+    @include flexBetween('column');
+    li {
+      i {
+        margin-right: 10px;
+      }
+      margin: 5px 0;
+      a {
+        font-size: 16px;
+        color: $text-unactive-color;
+      }
+      .active {
+        color: $text-color;
+      }
+    }
+  }
+}

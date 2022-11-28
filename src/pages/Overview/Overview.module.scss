@@ -1,0 +1,33 @@
+@import '../../services.scss';
+
+.overview {
+  @include alignSection();
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  gap: 30px;
+  .current_tasks_block,
+  .future_tasks_block,
+  .completed_tasks_block {
+    background: $card-block-background-color;
+    border-radius: 20px;
+    padding: 15px;
+    @include flexStart('column');
+    gap: 15px;
+    .tasks_block_header {
+       
+    }
+    .add_task_button {
+      width: 100%;
+      height: 30px;
+      border-radius: 10px;
+      background: $card-add-background-color;
+      font-size: 30px;
+      line-height: 20px;
+      &:active {
+        transform: scale(95%);
+      }
+    }
+   
+  }
+}

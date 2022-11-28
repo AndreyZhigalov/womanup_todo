@@ -1,0 +1,10 @@
+.main_layout {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: minmax(240px, max-content) 1fr;
+  grid-template-rows: 80px 1fr;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar content';
+}

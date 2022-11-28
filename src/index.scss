@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  text-decoration: none;
+  outline: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+@for $key from 1 through 6 {
+  h#{$key} {
+    font-size: 12 * $key;
+  }
+}
+
+i {
+  cursor: pointer;
+}
