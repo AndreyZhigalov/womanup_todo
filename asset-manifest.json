@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/womanup_todo/static/css/main.149f5152.css",
-    "main.js": "/womanup_todo/static/js/main.95a22735.js",
+    "main.js": "/womanup_todo/static/js/main.610ea6cc.js",
     "static/media/free-icon-google-2991148.png": "/womanup_todo/static/media/free-icon-google-2991148.9db27c1011edb821b59c.png",
     "index.html": "/womanup_todo/index.html",
     "main.149f5152.css.map": "/womanup_todo/static/css/main.149f5152.css.map",
-    "main.95a22735.js.map": "/womanup_todo/static/js/main.95a22735.js.map"
+    "main.610ea6cc.js.map": "/womanup_todo/static/js/main.610ea6cc.js.map"
   },
   "entrypoints": [
     "static/css/main.149f5152.css",
-    "static/js/main.95a22735.js"
+    "static/js/main.610ea6cc.js"
   ]
 }
