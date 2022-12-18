@@ -1,32 +1,36 @@
 import React from 'react';
-import { useNavigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './hooks/storeHook';
 import { getTaskList } from './Redux/tasksSlice';
 
 import MainLayout from './layouts/MainLayout';
-import Overview from './pages/Overview';
-import Stats from './pages/Stats';
-import Projects from './pages/Projects';
-import Chat from './pages/Chat';
 import Calendar from './pages/Calendar';
-import Settings from './pages/Settings';
+import Chat from './pages/Chat';
 import Login from './pages/Login';
+import Overview from './pages/Overview';
+import Projects from './pages/Projects';
 import Register from './pages/Register';
+import Settings from './pages/Settings';
+import Stats from './pages/Stats';
 
 import styles from './App.module.scss';
+import { getUser } from './Redux/userSlice';
 
 function App() {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const isAuth = useAppSelector((state) => state.userSlice.isAuth);
 
   React.useEffect(() => {
     dispatch(getTaskList());
-    if (!localStorage.getItem('isAuth')) {      
-      navigate('/login');
+    dispatch(getUser());
+    if (!isAuth) {
+      navigate('login');
     }
     if (isAuth) {
-      navigate('/overview');
+      const path = location.pathname.match(/\/[a-z]+$/)?.[0].substring(1);
+      return path === 'register' || path === 'login' ? navigate('overview') : navigate(path ?? '');
     }
   }, [isAuth]);
 

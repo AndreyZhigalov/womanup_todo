@@ -2,24 +2,15 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
 import { clearInput, setInput } from '../../Redux/searchSlice';
 
+import avatarPlaceholder from '../../assets/avatar_placeholder.png';
+
 import styles from './Header.module.scss';
 
 const Header = () => {
-  const [user, setUser] = React.useState<any>();
-  const [showProfileOptions, setShowProfileOptions] = React.useState<boolean>();
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const dispatch = useAppDispatch()
-  const input = useAppSelector(state => state.searchSlice.input)
-
-  React.useEffect(() => {
-    try {
-      fetch('https://randomuser.me/api/')
-        .then((res) => res.json())
-        .then((json) => setUser(json.results[0]));
-    } catch (error) {
-      alert('Обишка запроса случайного пользователя');
-    }
-  }, []);
+  const dispatch = useAppDispatch();
+  const input = useAppSelector((state) => state.searchSlice.input);
+  const { name, lastname, photo } = useAppSelector((state) => state.userSlice);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   return (
     <header className={styles.header}>
@@ -32,24 +23,17 @@ const Header = () => {
           value={input}
           onChange={() => dispatch(setInput(inputRef.current?.value as string))}
         />
-        <i className={styles.clear_icon + ' fa-regular fa-trash-can'} onClick={() => dispatch(clearInput())}></i>
+        <i
+          className={styles.clear_icon + ' fa-regular fa-trash-can'}
+          onClick={() => dispatch(clearInput())}></i>
       </div>
       <div className={styles.user_block}>
         <i className={styles.questions + ' fa-regular fa-circle-question'}></i>
         <i className={styles.notice + ' fa-regular fa-bell'}></i>
         <div className={styles.name_and_options}>
-          <div>
-            <h4 onClick={() => setShowProfileOptions(!showProfileOptions)}>
-              {user?.name?.first + ' ' + user?.name?.last}
-            </h4>
-            <i className="fa-solid fa-angle-down"></i>
-          </div>
-          <ul className={showProfileOptions ? styles.show_options : ''}>
-            <li>Профиль</li>
-            <li>Настройки</li>
-          </ul>
+          <h4>{name + ' ' + lastname}</h4>
         </div>
-        <img src={user?.picture.thumbnail} alt="" className={styles.avatar} />
+        <img src={!!photo ? photo : avatarPlaceholder} alt="" className={styles.avatar} />
       </div>
     </header>
   );

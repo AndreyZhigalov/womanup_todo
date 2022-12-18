@@ -63,7 +63,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li onClick={() => dispatch(removeUser())}>
-            <Link to="/login" className={pathname.endsWith('login') ? styles.active : undefined}>
+            <Link to="login" className={pathname.endsWith('login') ? styles.active : undefined}>
               {<i className="fa-solid fa-arrow-right-to-bracket"></i> && (
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
               )}
@@ -72,6 +72,7 @@ const Sidebar = () => {
           </li>
         </ul>
       </nav>
+     
     </section>
   );
 };

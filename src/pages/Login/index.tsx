@@ -17,9 +17,16 @@ const Login = () => {
 
   React.useEffect(() => {
     if (localStorage.getItem('isAuth')) {
-      navigate('/overview');
+      navigate('overview');
     }
   }, []);
+
+  const onSubmit = () => {
+    let name = localStorage.getItem('name') as string;
+    let lastname = localStorage.getItem('lastname') as string;
+    dispatch(login({ email: emailValue, password: passwordValue, name, lastname }));
+  }
+
 
   return (
     <div className={styles.login_page}>
@@ -30,8 +37,8 @@ const Login = () => {
           value={emailValue}
           onChange={() => setEmailValue(emailInputRef.current?.value as string)}
           type="email"
-          name=""
-          id=""
+          name="email"
+          id="email"
           placeholder="email"
         />
         <input
@@ -39,20 +46,18 @@ const Login = () => {
           value={passwordValue}
           onChange={() => setPasswordValue(passwordInputRef.current?.value as string)}
           type="password"
-          name=""
-          id=""
+          name="password"
+          id="password"
           placeholder="password"
         />
-        <button
-          type="submit"
-          onClick={() => dispatch(login({ email: emailValue, password: passwordValue }))}>
+        <button type="submit" onClick={onSubmit}>
           login
         </button>
         <span>или</span>
         <button aria-labelledby="google" onClick={() => dispatch(googleLogin())}>
           <img src={googleIcon} alt="" />
         </button>
-        <Link to={'/register'}>или зарегистрироваться</Link>
+        <Link to="../register">или зарегистрироваться</Link>
       </div>
     </div>
   );

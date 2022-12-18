@@ -2,12 +2,14 @@ import React from 'react';
 import { useAppDispatch } from '../../hooks/storeHook';
 
 import {
+  deleteTaskOnServer,
+  downloadFilesFromServer,
   removeCard,
   setTaskGroup,
   TaskDataType,
-  updateTask,
   updateCard,
-  deleteTask,
+  updateTask,
+  uploadFilesOnServer,
 } from '../../Redux/tasksSlice';
 
 import styles from './TaskCard.module.scss';
@@ -18,7 +20,18 @@ export type TaskCardType = {
 };
 
 const TaskCard: React.FC<TaskCardType> = ({
-  taskData: { taskID, text, header, editable, deadline, readers, isCurrent, isFuture, isCompleted },
+  taskData: {
+    taskID,
+    text,
+    header,
+    editable,
+    deadline,
+    readers,
+    isCurrent,
+    isFuture,
+    isCompleted,
+    files,
+  },
   droppedGroup,
 }) => {
   const dispatch = useAppDispatch();
@@ -33,11 +46,13 @@ const TaskCard: React.FC<TaskCardType> = ({
     isCurrent,
     isFuture,
     isCompleted,
+    files,
   };
   const [headerText, setHeaderText] = React.useState<string>(header);
   const [taskText, setTaskText] = React.useState<string>(text);
   const [dateText, setDateText] = React.useState<string | null>(deadline);
   const [showFileInputMenu, setShowFileInputMenu] = React.useState<boolean>(false);
+  const TaskCardRef = React.useRef<HTMLDivElement>(null);
   const headerRef = React.useRef<HTMLInputElement>(null);
   const textRef = React.useRef<HTMLTextAreaElement>(null);
   const filesRef = React.useRef<HTMLInputElement>(null);
@@ -54,6 +69,18 @@ const TaskCard: React.FC<TaskCardType> = ({
     isCompleted,
   };
 
+  React.useEffect(() => {
+    const fileInputClickHandler = (e: MouseEvent) => {
+      if (TaskCardRef.current && !e.composedPath().includes(TaskCardRef.current)) {
+        setShowFileInputMenu(false)
+      }
+    };
+
+    document.addEventListener('click', (e) => fileInputClickHandler(e));
+
+    return document.removeEventListener('click', (e) => fileInputClickHandler(e));
+  }, []);
+
   const onClickUpdateTask = (state: boolean) => {
     if (state) {
       setIsEditable(state);
@@ -66,19 +93,27 @@ const TaskCard: React.FC<TaskCardType> = ({
 
   const onClickRemoveTask = () => {
     dispatch(removeCard(taskID));
-    dispatch(deleteTask(taskID));
+    dispatch(deleteTaskOnServer({taskID, files}));
   };
 
-  const uploadFiles = () => {
+  const onClickFileInput = () => {
+    setShowFileInputMenu(state => !state);
     filesRef.current?.click();
-    setShowFileInputMenu(!showFileInputMenu);
   };
 
   const downloadFiles = () => {
-    setShowFileInputMenu(!showFileInputMenu);
+    setShowFileInputMenu(state => !state);
+    dispatch(downloadFilesFromServer(taskID));
   };
 
-  const setTaskToNewGroup = () => {
+  const uploadFiles = () => {
+    if (filesRef.current?.files) {
+      setShowFileInputMenu(state => !state);
+      dispatch(uploadFilesOnServer({ files: filesRef.current.files, taskID }));
+    }
+  };
+
+  const setTaskToNewGroup = (e: React.DragEvent<HTMLDivElement>) => {
     dispatch(setTaskGroup([taskID, droppedGroup as string]));
     dispatch(
       updateTask({
@@ -92,9 +127,15 @@ const TaskCard: React.FC<TaskCardType> = ({
 
   return (
     <div
+      ref={TaskCardRef}
       className={styles.task_card}
       onDoubleClick={() => onClickUpdateTask(true)}
-      onDragEnd={setTaskToNewGroup}
+      onDragStart={(e) => {
+        e.dataTransfer.dropEffect = 'move';
+        e.dataTransfer.effectAllowed = 'move';
+      }}
+      onDragEnd={(e) => setTaskToNewGroup(e)}
+      onKeyDown={(e) => e.code === 'Escape' && setIsEditable(false)}
       draggable>
       {!isEditable ? (
         <h5 className={styles.card_header}>{headerText}</h5>
@@ -110,12 +151,18 @@ const TaskCard: React.FC<TaskCardType> = ({
       )}
       <i
         className={styles.attached_files + ' fa-solid fa-paperclip'}
-        onClick={() => setShowFileInputMenu(!showFileInputMenu)}>
-        <input type={'file'} className={styles.input__hidden} multiple ref={filesRef}></input>
+        onClick={() => setShowFileInputMenu((state) => !state)}>
+        {!!files.length && <span className={styles.file_count}>{files.length}</span>}
+        <input
+          type={'file'}
+          className={styles.input__hidden}
+          onChange={uploadFiles}
+          multiple
+          ref={filesRef}></input>
         {showFileInputMenu && (
           <div className={styles.file_input_options}>
             <p onClick={downloadFiles}>Скачать</p>
-            <p onClick={uploadFiles}>Загрузить</p>
+            <p onClick={onClickFileInput}>Добавить</p>
           </div>
         )}
       </i>
@@ -127,18 +174,20 @@ const TaskCard: React.FC<TaskCardType> = ({
           ref={textRef}
           readOnly={!isEditable}
           className={styles.card_text}
+          onKeyDown={(e) => e.ctrlKey && e.code === 'Enter' && onClickUpdateTask(false)}
           onChange={() => setTaskText(textRef.current?.value as string)}
           value={taskText}
         />
       )}
       <div className={styles.card_readers}></div>
       <span
+        onClick={() => dateRef?.current?.showPicker()}
         className={`${styles.card_deadline} ${
           deadlineTimecode < new Date().getTime() && dateText ? styles.failed : ''
         }`}>
         {`${dateText ?? 'Бессрочно'} `}
         {isEditable && (
-          <i className="fa-regular fa-calendar" onClick={() => dateRef?.current?.showPicker()}>
+          <i className="fa-regular fa-calendar">
             <input
               ref={dateRef}
               type="date"

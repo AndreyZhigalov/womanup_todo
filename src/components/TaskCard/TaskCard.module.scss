@@ -9,11 +9,14 @@
   display: grid;
   grid-template-columns: 1fr 2fr 30px;
   grid-template-rows: max-content 1fr 30px;
-  
+
   .card_header {
+    padding-left: 5px;
+    padding-right: 5px;
     width: 100%;
     border-bottom: 2px solid white;
     grid-area: 1 / 1 / 2 / 3;
+    border-radius: 5px;
     &[aria-label='input'] {
       background-color: $card-block-background-color;
     }
@@ -24,6 +27,21 @@
     width: min-content;
     justify-self: flex-end;
     grid-area: 1 / 3 / 2 / 4;
+    &:focus {
+      outline: 3px solid black;
+    }
+    .file_count {
+      position: absolute;
+      top: -2px;
+      right: 110%;
+      padding: 4px;
+      font-size: 12px;
+      font-weight: 400;
+      text-align: right;
+      background-color: rgb(58, 153, 58);
+      color: white;
+      border-radius: 5px;
+    }
     .file_input_options {
       position: absolute;
       right: 0;
@@ -40,13 +58,13 @@
     }
   }
   .card_text {
-    font-size: 14px;
+    padding: 5px;
     grid-area: 2 / 1 / 4 /-1;
     width: 100%;
     height: 100%;
     word-wrap: break-word;
-    padding: 5px 0;
-    border-radius: 10px;
+    font-size: 14px;
+    border-radius: 5px;
     &[aria-label='input'] {
       background-color: $card-block-background-color;
     }
@@ -61,6 +79,7 @@
     width: 100%;
     text-align: right;
     margin-top: 2px;
+    cursor: pointer;
     &.failed {
       color: red;
     }
@@ -84,4 +103,8 @@
     padding: 0;
     outline: none;
   }
+}
+
+.grabbing {
+  cursor: grabbing;
 }

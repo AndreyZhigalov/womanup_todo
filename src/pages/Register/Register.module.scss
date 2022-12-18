@@ -7,6 +7,7 @@
   background-color: $background-color;
   .wrapper {
     @include flexCenter('column');
+
     gap: 15px;
     background-color: $card-block-background-color;
     padding: 30px;
@@ -32,4 +33,10 @@
       border-radius: 5px;
     }
   }
+  
+}
+
+.register_error {
+  color: rgb(203, 0, 0);
+  font-size: 12px;
 }

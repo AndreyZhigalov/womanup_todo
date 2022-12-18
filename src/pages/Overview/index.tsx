@@ -18,11 +18,15 @@ const Overview = () => {
     }
   }, [status]);
 
+
   return (
     <section className={styles.overview}>
       <div
         className={styles.current_tasks_block}
-        onDragOverCapture={() => setDroppedGroup('current')}>
+        onDragOverCapture={(e) => {
+          e.preventDefault();           
+          setDroppedGroup('current');
+        }}>
         <h4 className={styles.tasks_block_header}>Текущие задачи</h4>
         <button
           className={styles.add_task_button}
@@ -42,7 +46,10 @@ const Overview = () => {
       </div>
       <div
         className={styles.future_tasks_block}
-        onDragOverCapture={() => setDroppedGroup('future')}>
+        onDragOverCapture={(e) => {
+          e.preventDefault();
+          setDroppedGroup('future');
+        }}>
         <h4 className={styles.tasks_block_header}>Задачи в очереди</h4>
         <button
           className={styles.add_task_button}
@@ -62,7 +69,10 @@ const Overview = () => {
       </div>
       <div
         className={styles.completed_tasks_block}
-        onDragOverCapture={() => setDroppedGroup('completed')}>
+        onDragOverCapture={(e) => {
+          e.preventDefault();
+          setDroppedGroup('completed');
+        }}>
         <h4 className={styles.tasks_block_header}>Выполненные задачи</h4>
         <button
           className={styles.add_task_button}

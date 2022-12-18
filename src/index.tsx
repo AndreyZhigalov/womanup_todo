@@ -1,18 +1,19 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
-import store from './Redux/store';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import store from './Redux/store';
 
 import App from './App';
 
-import  "./index.scss"
+import "./index.scss";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <Routes>
+        <Route path='womanup_todo/*' element={<App />}/>
+      </Routes>
     </BrowserRouter>
   </Provider>,
 );

@@ -28,8 +28,8 @@ body {
 }
 
 @for $key from 1 through 6 {
-  h#{$key} {
-    font-size: 12 * $key;
+  H#{$key} {
+    font-size: 32 / $key;
   }
 }
 

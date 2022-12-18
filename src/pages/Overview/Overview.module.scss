@@ -27,6 +27,9 @@
       &:active {
         transform: scale(95%);
       }
+      &:hover {
+        background: $card-add-hover-color ;
+      }
     }
    
   }
