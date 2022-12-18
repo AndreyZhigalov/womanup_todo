@@ -2,7 +2,7 @@ import React from 'react';
 import TaskCard from '../../components/TaskCard';
 import { useAppSelector, useAppDispatch } from '../../hooks/storeHook';
 
-import { addNewCard, addNewTask, AddTaskStatus } from '../../Redux/tasksSlice';
+import { addNewCard, addNewTask, AddTaskStatus, FetchTaskListStatus } from '../../Redux/tasksSlice';
 
 import styles from './Overview.module.scss';
 
@@ -18,21 +18,32 @@ const Overview = () => {
     }
   }, [status]);
 
+  const addTask = (type: string) => {
+    if (status === AddTaskStatus.WAITING || status === FetchTaskListStatus.SUCCESS)
+      dispatch(addNewCard(type));
+  };
+
+  if (status === FetchTaskListStatus.LOADING) {
+    return (
+      <section className={styles.overview}>
+        <div className={styles.loading_wrapper}>
+          <div className={styles.dots_bars}></div>
+          <span className={styles.loading_message}>Загрузка списка задач</span>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.overview}>
       <div
         className={styles.current_tasks_block}
         onDragOverCapture={(e) => {
-          e.preventDefault();           
+          e.preventDefault();
           setDroppedGroup('current');
         }}>
         <h4 className={styles.tasks_block_header}>Текущие задачи</h4>
-        <button
-          className={styles.add_task_button}
-          onClick={() =>
-            status === AddTaskStatus.WAITING ? dispatch(addNewCard('current')) : false
-          }>
+        <button className={styles.add_task_button} onClick={() => addTask('current')}>
           +
         </button>
         {taskList
@@ -51,11 +62,7 @@ const Overview = () => {
           setDroppedGroup('future');
         }}>
         <h4 className={styles.tasks_block_header}>Задачи в очереди</h4>
-        <button
-          className={styles.add_task_button}
-          onClick={() =>
-            status === AddTaskStatus.WAITING ? dispatch(addNewCard('future')) : false
-          }>
+        <button className={styles.add_task_button} onClick={() => addTask('future')}>
           +
         </button>
         {taskList
@@ -74,11 +81,7 @@ const Overview = () => {
           setDroppedGroup('completed');
         }}>
         <h4 className={styles.tasks_block_header}>Выполненные задачи</h4>
-        <button
-          className={styles.add_task_button}
-          onClick={() =>
-            status === AddTaskStatus.WAITING ? dispatch(addNewCard('completed')) : false
-          }>
+        <button className={styles.add_task_button} onClick={() => addTask('completed')}>
           +
         </button>
         {taskList

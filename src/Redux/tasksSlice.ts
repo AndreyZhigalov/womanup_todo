@@ -9,8 +9,7 @@ import {
   QuerySnapshot,
   updateDoc,
 } from 'firebase/firestore/lite';
-import { deleteObject, getBlob, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { blob } from 'stream/consumers';
+import { deleteObject,  getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { DB } from '../firebase';
 import { storageRef } from './../firebase/index';
 import { RootState } from './store';
@@ -32,6 +31,12 @@ export enum AddTaskStatus {
   ADDED = 'The new card was added',
   ERROR = 'The card adding was rejected',
   WAITING = 'I am waiting for new card',
+}
+
+export enum FetchTaskListStatus {
+  LOADING = 'Waiting response',
+  SUCCESS = 'Tasklist has been received',
+  ERROR = 'Tasklist fetching was rejected',
 }
 
 interface taskState {
@@ -103,10 +108,13 @@ const tasksSlice = createSlice({
     builder.addCase(addNewTask.rejected, () => {
       alert('Ошибка при создании новой задачи');
     });
-    builder.addCase(getTaskList.pending, () => {});
+    builder.addCase(getTaskList.pending, (state) => {
+      state.status = FetchTaskListStatus.LOADING
+    });
     builder.addCase(
       getTaskList.fulfilled,
       (state, action: PayloadAction<QuerySnapshot<DocumentData>>) => {
+        state.status = FetchTaskListStatus.SUCCESS
         const tasks = [];
         for (let value of action.payload.docs) {
           tasks.push(value.data() as TaskDataType);
@@ -114,7 +122,8 @@ const tasksSlice = createSlice({
         state.taskList = tasks;
       },
     );
-    builder.addCase(getTaskList.rejected, () => {
+    builder.addCase(getTaskList.rejected, (state) => {
+      state.status = FetchTaskListStatus.ERROR;
       alert('Ошибка при загрузке списка задач');
     });
     builder.addCase(updateTask.fulfilled, (state, action) => {

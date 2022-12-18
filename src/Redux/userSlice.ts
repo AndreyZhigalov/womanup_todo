@@ -1,3 +1,4 @@
+import { RootState } from './store';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   createUserWithEmailAndPassword,
@@ -5,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from 'firebase/auth';
-import { addDoc, collection, getDoc, getDocs } from 'firebase/firestore/lite';
+import { addDoc, collection, getDocs } from 'firebase/firestore/lite';
 import { auth, DB } from '../firebase';
 
 export type UserType = {
@@ -16,7 +17,15 @@ export type UserType = {
   id: string | null;
   isAuth: boolean;
   photo: string;
+  status: AuthStatus;
 };
+
+export enum AuthStatus {
+  LOADING = 'Getting user data from server',
+  ERROR = 'User data fetching has been failed',
+  SUCCESS = 'User data received',
+  WAITING = 'Waiting user authorization',
+}
 
 type fetchUserData = { email: string; password: string; name: string; lastname: string };
 
@@ -28,6 +37,7 @@ const initialState: UserType = {
   id: null,
   isAuth: false,
   photo: '',
+  status: AuthStatus.WAITING,
 };
 
 const userSlice = createSlice({
@@ -65,7 +75,7 @@ const userSlice = createSlice({
       state.token = token;
       state.id = id;
       state.isAuth = isAuth === 'true' ? true : false;
-      state.photo = photo === "null" ? "" : photo ;
+      state.photo = photo === 'null' ? '' : photo;
     },
     removeUser(state) {
       state.name = '';
@@ -82,6 +92,10 @@ const userSlice = createSlice({
       localStorage.removeItem('userEmail');
       localStorage.removeItem('isAuth');
       localStorage.removeItem('userPhoto');
+      state.status = AuthStatus.WAITING;
+    },
+    setStatus(state, action: PayloadAction<AuthStatus>) {
+      state.status = action.payload;
     },
   },
 });
@@ -90,11 +104,14 @@ const provider = new GoogleAuthProvider();
 
 export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk) => {
   const dispatch = Thunk.dispatch;
+  dispatch(setStatus(AuthStatus.LOADING));
   signInWithPopup(auth, provider)
     .then((result) => {
+      let userID = localStorage.getItem('userId') as string;
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const { uid, email, displayName, photoURL } = result.user;
+
       dispatch(
         setUser({
           id: uid,
@@ -104,9 +121,9 @@ export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk)
           name: displayName ?? '',
           lastname: '',
           photo: photoURL ?? '',
+          status: AuthStatus.SUCCESS,
         }),
       );
-      let userID = localStorage.getItem('userId') as string;
 
       !userID &&
         addDoc(collection(DB, `userData/${uid}/user`), {
@@ -118,6 +135,7 @@ export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk)
         });
     })
     .catch((error) => {
+      dispatch(setStatus(AuthStatus.ERROR));
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode + ' ' + errorMessage);
@@ -128,7 +146,7 @@ export const register = createAsyncThunk<void, fetchUserData>(
   'registerStatus',
   async ({ name, lastname, email, password }, Thunk) => {
     const dispatch = Thunk.dispatch;
-
+    dispatch(setStatus(AuthStatus.LOADING));
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { uid, email } = userCredential.user;
@@ -148,10 +166,12 @@ export const register = createAsyncThunk<void, fetchUserData>(
             name,
             lastname,
             photo: '',
+            status: AuthStatus.SUCCESS,
           }),
         );
       })
       .catch((error) => {
+        dispatch(setStatus(AuthStatus.ERROR));
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode + ' ' + errorMessage);
@@ -161,15 +181,15 @@ export const register = createAsyncThunk<void, fetchUserData>(
 
 export const login = createAsyncThunk<void, fetchUserData>(
   'emailAuthStatus',
-  async ({ email, password  }, Thunk) => {
+  async ({ email, password }, Thunk) => {
     const dispatch = Thunk.dispatch;
-
+    dispatch(setStatus(AuthStatus.LOADING));
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const { uid, email, refreshToken } = userCredential.user;
-
         const querySnapshot = await getDocs(collection(DB, `userData/${uid}/user`));
-        const {name, lastname, photo} = querySnapshot.docs[0].data();
+        const { name, lastname, photo } = querySnapshot.docs[0].data();
+
         dispatch(
           setUser({
             id: uid,
@@ -179,10 +199,12 @@ export const login = createAsyncThunk<void, fetchUserData>(
             name,
             lastname,
             photo: photo,
+            status: AuthStatus.SUCCESS,
           }),
         );
       })
       .catch((error) => {
+        dispatch(setStatus(AuthStatus.ERROR));
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode + ' ' + errorMessage);
@@ -190,5 +212,5 @@ export const login = createAsyncThunk<void, fetchUserData>(
   },
 );
 
-export const { setUser, removeUser, getUser } = userSlice.actions;
+export const { setUser, removeUser, getUser, setStatus } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks/storeHook';
-import { register } from '../../Redux/userSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
+import { AuthStatus, register } from '../../Redux/userSlice';
 
 import styles from './Register.module.scss';
+import loaderStyle from '../../App.module.scss';
 
 const Register = () => {
   const dispatch = useAppDispatch();
+  const status = useAppSelector(state => state.userSlice.status)
   const navigate = useNavigate();
 
   const [nameValue, setNameValue] = React.useState<string>('');
@@ -25,18 +27,20 @@ const Register = () => {
   const [passwordError, setPasswordError] = React.useState<string>('');
 
   React.useEffect(() => {
-    if (localStorage.getItem('isAuth') === "true") {
+    if (localStorage.getItem('isAuth') === 'true') {
       navigate('overview');
     }
   }, []);
 
-  const onSumbit = () => {
-    dispatch(register({
-      name: nameValue,
-      lastname: lastnameValue,
-      email: emailValue,
-      password: passwordValue,
-    }));    
+  const onSubmit = () => {
+    dispatch(
+      register({
+        name: nameValue,
+        lastname: lastnameValue,
+        email: emailValue,
+        password: passwordValue,
+      }),
+    );
   };
 
   const validate = () => {
@@ -50,26 +54,37 @@ const Register = () => {
     );
 
     if (!name) {
-      setNameError('Имя может содержать только буквы');
+      nameInputRef.current?.value.length === 0
+        ? setNameError('Обязательное поле')
+        : setNameError('Имя может содержать только буквы');
     }
     if (!lastname) {
-      setLastnameError('Фамилия может содержать только буквы');
+      if (lastnameInputRef.current?.value && lastnameInputRef.current?.value.length > 0) {
+        setLastnameError('Фамилия может содержать только буквы');
+      }
     }
     if (!email) {
-      setEmailError('Неправильный Email. Пример: example@mail.ru');
+      emailInputRef.current?.value.length === 0
+        ? setEmailError('Обязательное поле')
+        : setEmailError('Неправильный Email. Пример: example@mail.ru');
     }
     if (!password) {
-      setPasswordError(`От 8-ми симв. Строчные, заглавные, цифры и символы(!"'№;%:?*)`);
+      passwordInputRef.current?.value.length === 0
+        ? setPasswordError('Обязательное поле')
+        : setPasswordError(`От 8-ми символов. Включая заглавные, цифры и символы(!"'№;%:?*)`);
     }
 
-    if (name && lastname && email && password) {
-      onSumbit();
+    if (name && email && password) {
+      onSubmit();
     }
   };
 
   return (
     <div className={styles.register_page}>
-      <div className={styles.wrapper}>
+      {status === AuthStatus.LOADING && <div className={loaderStyle.loading_auth__overlay}>
+        <span className={loaderStyle.loader}></span>
+      </div>}
+      <form className={styles.wrapper} onSubmit={(e) => e.preventDefault()}>
         <h1>WomanUP todo</h1>
         <input
           ref={nameInputRef}
@@ -113,7 +128,7 @@ const Register = () => {
         <span className={styles.register_error}>{passwordError}</span>
         <button onClick={validate}>Register</button>
         <Link to="../login">или войти</Link>
-      </div>
+      </form>
     </div>
   );
 };

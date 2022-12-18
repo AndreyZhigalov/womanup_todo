@@ -6,6 +6,15 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr;
   gap: 30px;
+  .loading_wrapper {
+    justify-self: center;
+    align-self: center;
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+  }
+  .loading_message {
+    font: bold 24px 'Noto Sans';
+  }
   .current_tasks_block,
   .future_tasks_block,
   .completed_tasks_block {
@@ -15,7 +24,6 @@
     @include flexStart('column');
     gap: 15px;
     .tasks_block_header {
-       
     }
     .add_task_button {
       width: 100%;
@@ -28,9 +36,44 @@
         transform: scale(95%);
       }
       &:hover {
-        background: $card-add-hover-color ;
+        background: $card-add-hover-color;
       }
     }
-   
+  }
+}
+
+.dots_bars {
+  margin: auto;
+  margin-bottom: 5px;
+  width: 40px;
+  height: 26px;
+  --c: linear-gradient(currentColor 0 0);
+  background: var(--c) 0 100%, var(--c) 50% 100%, var(--c) 100% 100%;
+  background-size: 8px calc(100% - 4px);
+  background-repeat: no-repeat;
+  position: relative;
+}
+.dots_bars:before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  left: 0;
+  top: 0;
+  animation: db3_1 1.5s linear infinite alternate,
+    db3_2 0.75s cubic-bezier(0, 200, 0.8, 200) infinite;
+}
+
+@keyframes db3_1 {
+  100% {
+    left: calc(100% - 8px);
+  }
+}
+
+@keyframes db3_2 {
+  100% {
+    top: -0.1px;
   }
 }
