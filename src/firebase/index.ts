@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getStorage, ref } from 'firebase/storage';
 
@@ -20,3 +20,15 @@ export const auth = getAuth(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
 export const storageRef = ref(storage);
+
+export let user = auth.currentUser;
+
+onAuthStateChanged(auth, (userData) => {
+  if (userData) {
+    user = userData;
+    console.log(userData)
+  } else {
+    // User is signed out
+    // ...
+  }
+});

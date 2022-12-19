@@ -249,6 +249,8 @@ export const downloadFilesFromServer = createAsyncThunk<void, string>(
   },
 );
 
+export const taskListSelector = (state: RootState) => state.tasksSlice
+
 export const { addNewCard, clearAllTasks, removeCard, setTaskGroup, updateCard } =
   tasksSlice.actions;
 export default tasksSlice.reducer;

@@ -113,7 +113,8 @@ const TaskCard: React.FC<TaskCardType> = ({
     }
   };
 
-  const setTaskToNewGroup = (e: React.DragEvent<HTMLDivElement>) => {
+  const setTaskToNewGroup = () => {
+    console.log(droppedGroup);
     dispatch(setTaskGroup([taskID, droppedGroup as string]));
     dispatch(
       updateTask({
@@ -134,7 +135,7 @@ const TaskCard: React.FC<TaskCardType> = ({
         e.dataTransfer.dropEffect = 'move';
         e.dataTransfer.effectAllowed = 'move';
       }}
-      onDragEnd={(e) => setTaskToNewGroup(e)}
+      onDragEnd={setTaskToNewGroup}
       onKeyDown={(e) => e.code === 'Escape' && setIsEditable(false)}
       draggable>
       {!isEditable ? (

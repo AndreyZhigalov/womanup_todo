@@ -2,13 +2,13 @@ import React from 'react';
 import TaskCard from '../../components/TaskCard';
 import { useAppSelector, useAppDispatch } from '../../hooks/storeHook';
 
-import { addNewCard, addNewTask, AddTaskStatus, FetchTaskListStatus } from '../../Redux/tasksSlice';
+import { addNewCard, addNewTask, AddTaskStatus, FetchTaskListStatus, taskListSelector } from '../../Redux/tasksSlice';
 
 import styles from './Overview.module.scss';
 
 const Overview = () => {
   const dispatch = useAppDispatch();
-  const { taskList, status } = useAppSelector((state) => state.tasksSlice);
+  const { taskList, status } = useAppSelector(taskListSelector);
   const { input } = useAppSelector((state) => state.searchSlice);
   const [droppedGroup, setDroppedGroup] = React.useState<string>();
 

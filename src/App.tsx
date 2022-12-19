@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './hooks/storeHook';
 import { getTaskList } from './Redux/tasksSlice';
+import { getUser, userSliceSelector } from './Redux/userSlice';
 
 import MainLayout from './layouts/MainLayout';
 import Calendar from './pages/Calendar';
@@ -14,13 +15,12 @@ import Settings from './pages/Settings';
 import Stats from './pages/Stats';
 
 import styles from './App.module.scss';
-import { getUser } from './Redux/userSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const isAuth = useAppSelector((state) => state.userSlice.isAuth);
+  const { isAuth } = useAppSelector(userSliceSelector);
 
   React.useEffect(() => {
     dispatch(getTaskList());

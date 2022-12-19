@@ -1,6 +1,6 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/storeHook';
+import { clearInputs } from '../../Redux/settingsSlice';
 import { removeUser } from '../../Redux/userSlice';
 
 import styles from './Sidebar.module.scss';
@@ -62,7 +62,7 @@ const Sidebar = () => {
               Настройки
             </Link>
           </li>
-          <li onClick={() => dispatch(removeUser())}>
+          <li onClick={() => {dispatch(removeUser()); dispatch(clearInputs())}}>
             <Link to="login" className={pathname.endsWith('login') ? styles.active : undefined}>
               {<i className="fa-solid fa-arrow-right-to-bracket"></i> && (
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
-import { AuthStatus, register } from '../../Redux/userSlice';
+import { AuthStatus, register, userSliceSelector } from '../../Redux/userSlice';
 
 import styles from './Register.module.scss';
 import loaderStyle from '../../App.module.scss';
 
 const Register = () => {
   const dispatch = useAppDispatch();
-  const status = useAppSelector(state => state.userSlice.status)
+  const { status } = useAppSelector(userSliceSelector);
   const navigate = useNavigate();
 
   const [nameValue, setNameValue] = React.useState<string>('');
@@ -46,7 +46,7 @@ const Register = () => {
   const validate = () => {
     let name = /^[а-яёА-Яёa-zA-Z]+$/.test(nameInputRef.current?.value as string);
     let lastname = /^[а-яёА-Яёa-zA-Z]+$/.test(lastnameInputRef.current?.value as string);
-    let email = /^([a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
+    let email = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
       emailInputRef.current?.value as string,
     );
     let password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
@@ -84,7 +84,7 @@ const Register = () => {
       {status === AuthStatus.LOADING && <div className={loaderStyle.loading_auth__overlay}>
         <span className={loaderStyle.loader}></span>
       </div>}
-      <form className={styles.wrapper} onSubmit={(e) => e.preventDefault()}>
+      <form className={styles.wrapper} onSubmit={(e) => {e.preventDefault(); validate()}}>
         <h1>WomanUP todo</h1>
         <input
           ref={nameInputRef}
@@ -126,7 +126,7 @@ const Register = () => {
           placeholder="Пароль"
         />
         <span className={styles.register_error}>{passwordError}</span>
-        <button onClick={validate}>Register</button>
+        <button type="submit">Register</button>
         <Link to="../login">или войти</Link>
       </form>
     </div>

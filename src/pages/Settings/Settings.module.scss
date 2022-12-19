@@ -1,5 +1,87 @@
-@import "../../services.scss";
+@import '../../services.scss';
 
 .settings {
-    @include alignSection()
+  @include alignSection();
+}
+.header {
+  margin-bottom: 30px;
+}
+
+.form {
+  @include flexCenter('column');
+  gap: 20px;
+  width: 100%;
+}
+
+.avatar_wrapper {
+  @include flexCenter('column');
+  gap: 10px;
+  .avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+
+  .avatar_upload_button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.253);
+    background-color: white;
+    cursor: pointer;
+    &:active {
+      background-color: rgb(80, 80, 80);
+      color: white;
+    }
+  }
+  .hidden {
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+  }
+}
+.error {
+  font-size: 12px;
+  color: rgb(200, 0, 0);
+  align-self: flex-end;
+}
+
+.user_data,
+.password_wrapper {
+  padding: 20px;
+  @include flexCenter('column');
+  gap: 10px;
+  width: 100%;
+  max-width: 640px;
+  background-color: $card-block-background-color;
+  border-radius: 10px;
+}
+
+.option {
+  @include flexBetween('row');
+  width: 100%;
+  font-size: 20px;
+}
+.input {
+  padding: 0 15px;
+  font-size: 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.157);
+  &:focus {
+    outline: 3px solid black;
+  }
+}
+.submit_button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.088);
+  background-color: $button-color;
+  font-size: 16px;
+  cursor: pointer;
+  &:active {
+    background-color: $button-color-active;
+  }
 }

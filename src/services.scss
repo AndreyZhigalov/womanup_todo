@@ -6,6 +6,8 @@ $card-add-hover-color: #e9f6f1;
 $task-background-color: #ffffff;
 $text-color: #000000;
 $text-unactive-color: #c0c0c0;
+$button-color: hsl(136, 74%, 73%);
+$button-color-active: hsl(136, 74%, 43%);
 $box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
 
 @mixin flexBetween($type) {

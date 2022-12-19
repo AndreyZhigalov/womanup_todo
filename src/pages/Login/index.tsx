@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
-import { AuthStatus, googleLogin, login } from '../../Redux/userSlice';
+import { AuthStatus, googleLogin, login, userSliceSelector } from '../../Redux/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
 
 import googleIcon from '../../assets/free-icon-google-2991148.png';
@@ -11,7 +11,7 @@ import loaderStyle from '../../App.module.scss';
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const status = useAppSelector((state) => state.userSlice.status);
+  const {status} = useAppSelector(userSliceSelector);
 
   const [emailValue, setEmailValue] = React.useState<string>('');
   const [passwordValue, setPasswordValue] = React.useState<string>('');
@@ -35,7 +35,7 @@ const Login = () => {
   };
 
   const validate = () => {
-    let email = /^([a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
+    let email = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
       emailInputRef.current?.value as string,
     );
     let password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
@@ -64,7 +64,7 @@ const Login = () => {
           <span className={loaderStyle.loader}></span>
         </div>
       )}
-      <form className={styles.wrapper} onSubmit={(e) => e.preventDefault()}>
+      <form className={styles.wrapper} onSubmit={(e) =>{ e.preventDefault(); validate()}}>
         <h1>WomanUP todo</h1>
         <input
           ref={emailInputRef}
@@ -86,7 +86,7 @@ const Login = () => {
           placeholder="password"
         />
         <span className={styles.login_error}>{passwordError}</span>
-        <button type="submit" onClick={validate}>
+        <button type="submit" >
           login
         </button>
         <span>или</span>

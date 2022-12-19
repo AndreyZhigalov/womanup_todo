@@ -12,7 +12,7 @@ import { auth, DB } from '../firebase';
 export type UserType = {
   name: string;
   lastname: string;
-  email: string | null;
+  email: string;
   token: string | null;
   id: string | null;
   isAuth: boolean;
@@ -32,7 +32,7 @@ type fetchUserData = { email: string; password: string; name: string; lastname: 
 const initialState: UserType = {
   name: '',
   lastname: '',
-  email: null,
+  email: '',
   token: null,
   id: null,
   isAuth: false,
@@ -44,6 +44,22 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setPhoto(state, action: PayloadAction<string>) {
+      localStorage.setItem('userPhoto', action.payload);
+      state.photo = action.payload;
+    },
+    setName(state, action: PayloadAction<string>) {
+      localStorage.setItem('userName', action.payload);
+      state.name = action.payload;
+    },
+    setLastname(state, action: PayloadAction<string>) {
+      localStorage.setItem('userLastname', action.payload);
+      state.lastname = action.payload;
+    },
+    setEmail(state, action: PayloadAction<string>) {
+      localStorage.setItem('userEmail', action.payload);
+      state.email = action.payload;
+    },
     setUser(state, action: PayloadAction<UserType>) {
       state.name = action.payload.name;
       state.lastname = action.payload.lastname;
@@ -80,7 +96,7 @@ const userSlice = createSlice({
     removeUser(state) {
       state.name = '';
       state.lastname = '';
-      state.email = null;
+      state.email = '';
       state.token = null;
       state.id = null;
       state.isAuth = false;
@@ -106,29 +122,30 @@ export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk)
   const dispatch = Thunk.dispatch;
   dispatch(setStatus(AuthStatus.LOADING));
   signInWithPopup(auth, provider)
-    .then((result) => {
-      let userID = localStorage.getItem('userId') as string;
+    .then(async (result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const { uid, email, displayName, photoURL } = result.user;
-
+      const getUserData = await getDocs(collection(DB, `userData/${uid}/user`));
+      const user = getUserData.docs[0]?.data();
+      const [name, lastname] = displayName?.split(/\s/) ?? ["", ""]
       dispatch(
         setUser({
           id: uid,
           token: token as string,
-          email: email,
+          email: email ?? '',
           isAuth: true,
-          name: displayName ?? '',
-          lastname: '',
+          name: name ?? "",
+          lastname: lastname ?? '',
           photo: photoURL ?? '',
           status: AuthStatus.SUCCESS,
         }),
       );
 
-      !userID &&
+      !user &&
         addDoc(collection(DB, `userData/${uid}/user`), {
           email,
-          password: null,
+          password: "",
           name: displayName,
           lastname: '',
           photo: photoURL,
@@ -160,7 +177,7 @@ export const register = createAsyncThunk<void, fetchUserData>(
         dispatch(
           setUser({
             id: uid,
-            email: email,
+            email: email ?? '',
             token: '',
             isAuth: true,
             name,
@@ -194,7 +211,7 @@ export const login = createAsyncThunk<void, fetchUserData>(
           setUser({
             id: uid,
             token: refreshToken,
-            email,
+            email: email ?? '',
             isAuth: true,
             name,
             lastname,
@@ -212,5 +229,8 @@ export const login = createAsyncThunk<void, fetchUserData>(
   },
 );
 
-export const { setUser, removeUser, getUser, setStatus } = userSlice.actions;
+export const userSliceSelector = (state: RootState) => state.userSlice;
+
+export const { setUser, removeUser, getUser, setStatus, setPhoto, setName, setLastname, setEmail } =
+  userSlice.actions;
 export default userSlice.reducer;
