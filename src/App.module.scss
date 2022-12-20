@@ -1,7 +1,10 @@
+@import './services.scss';
+
 .App {
   width: 100%;
   height: 100%;
   min-width: 1080px;
+  background-color: var(--body-background);
 }
 .loading_auth__overlay {
   position: absolute;

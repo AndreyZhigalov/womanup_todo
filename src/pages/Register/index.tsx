@@ -113,7 +113,7 @@ const Register = () => {
           type="email"
           name="email"
           id="email"
-          placeholder="email"
+          placeholder="Email"
         />
         <span className={styles.register_error}>{emailError}</span>
         <input
@@ -126,7 +126,7 @@ const Register = () => {
           placeholder="Пароль"
         />
         <span className={styles.register_error}>{passwordError}</span>
-        <button type="submit">Register</button>
+        <button type="submit">Создать аккаунт</button>
         <Link to="../login">или войти</Link>
       </form>
     </div>

@@ -15,6 +15,7 @@ export type settingsSliceType = {
   currentPasswordError: boolean;
   passwordMatchError: boolean;
   passwordError: boolean;
+  theme: string;
 };
 
 type ErrorsType = {
@@ -50,6 +51,7 @@ const initialState: settingsSliceType = {
   currentPasswordError: false,
   passwordMatchError: false,
   passwordError: false,
+  theme: 'light',
 };
 
 const settingsSlice = createSlice({
@@ -104,10 +106,15 @@ const settingsSlice = createSlice({
       state.passwordError = action.payload;
     },
     clearInputs(state) {
-      state.currentPasswordInput = ""
-      state.newPasswordInput = ""
-      state.repeatNewPasswordInput = ""
-    }
+      state.currentPasswordInput = '';
+      state.newPasswordInput = '';
+      state.repeatNewPasswordInput = '';
+    },
+    toggleTheme(state) {
+      const theme = state.theme === "dark" ? 'light' : 'dark';
+      localStorage.setItem('theme', theme);
+      state.theme = theme;
+    },
   },
 });
 
@@ -127,6 +134,7 @@ export const {
   setPasswordMatchError,
   setPasswordError,
   clearInputs,
+  toggleTheme,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

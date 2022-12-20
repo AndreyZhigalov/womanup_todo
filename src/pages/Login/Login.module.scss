@@ -4,40 +4,45 @@
   @include flexCenter('column');
   height: 100%;
   width: 100%;
-  background-color: $background-color;
+  background-color: var(--background-color);
   .wrapper {
     @include flexCenter('column');
     gap: 10px;
-    background-color: $card-block-background-color;
+    background-color: var(--card-block-background-color);
     padding: 30px;
     border-radius: 10px;
-    box-shadow: $box-shadow;
+    box-shadow: var(--box-shadow);
     h1 {
-        font-size: 36px;
-        margin-bottom: 24px;
+      font-size: 36px;
+      margin-bottom: 24px;
+      color: var(--text-color-2);
     }
     input {
+      padding-left: 20px;
       height: 50px;
       width: 400px;
-      box-shadow: $box-shadow;
+      box-shadow: var(--box-shadow);
       border-radius: 10px;
-      padding-left: 20px;
+      font-size: 20px;
     }
     button {
-        cursor: pointer;
+      cursor: pointer;
       &[type='submit'] {
         padding: 5px 10px;
       }
       &[aria-labelledby='google'] {
         padding: 5px 6px 0;
         img {
-            width: 24px;
+          width: 24px;
         }
       }
       font-size: 24px;
-      background-color: $background-color;
-      box-shadow: $box-shadow;
+      background-color: white;
+      box-shadow: var(--box-shadow);
       border-radius: 5px;
+    }
+    a {
+      color: var(--text-color-2);
     }
   }
 }

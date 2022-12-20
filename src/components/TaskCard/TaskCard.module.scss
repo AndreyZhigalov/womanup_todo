@@ -1,7 +1,7 @@
 @import '../../services.scss';
 
 .task_card {
-  background-color: $card-background-color;
+  background-color: var(--card-background-color);
   border-radius: 10px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.235);
   padding: 10px;
@@ -13,12 +13,13 @@
   .card_header {
     padding-left: 5px;
     padding-right: 5px;
+    padding-bottom: 5px;
     width: 100%;
-    border-bottom: 2px solid white;
     grid-area: 1 / 1 / 2 / 3;
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0;
+    font-size: 16px;
     &[aria-label='input'] {
-      background-color: $card-block-background-color;
+      background-color: var(--task-background-color);
     }
   }
   .attached_files {
@@ -46,7 +47,7 @@
       position: absolute;
       right: 0;
       top: 0;
-      background-color: $card-background-color;
+      background-color: var(--card-background-color);
       padding: 10px;
       border-radius: 5px;
       font-size: 14px;
@@ -64,9 +65,9 @@
     height: 100%;
     word-wrap: break-word;
     font-size: 14px;
-    border-radius: 5px;
+    color: var(--text-color-2);
     &[aria-label='input'] {
-      background-color: $card-block-background-color;
+      background-color: var(--task-background-color);
     }
   }
   .card_readers {
@@ -78,7 +79,7 @@
     grid-area: 4 / 2 / 5 / 3;
     width: 100%;
     text-align: right;
-    margin-top: 2px;
+    margin-top: 6px;
     cursor: pointer;
     &.failed {
       color: red;
@@ -89,7 +90,7 @@
     grid-area: 4 / 3 / 5 / 4;
     text-align: end;
     color: green;
-    margin-top: 3px;
+    margin-top: 6px;
   }
   .remove_task {
     color: rgb(161, 1, 1);

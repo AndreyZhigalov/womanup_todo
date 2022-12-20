@@ -26,7 +26,6 @@ export let user = auth.currentUser;
 onAuthStateChanged(auth, (userData) => {
   if (userData) {
     user = userData;
-    console.log(userData)
   } else {
     // User is signed out
     // ...

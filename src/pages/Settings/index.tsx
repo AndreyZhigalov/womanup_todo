@@ -24,7 +24,7 @@ import { setEmail, setLastname, setName, setPhoto, userSliceSelector } from '../
 import avatarPlaceholder from '../../assets/avatar_placeholder.png';
 
 import styles from './Settings.module.scss';
-import {  updateEmail, updatePassword, updateProfile } from 'firebase/auth';
+import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 
 const Settings = () => {
   const dispatch = useAppDispatch();
@@ -77,14 +77,14 @@ const Settings = () => {
     (async () => {
       if (avatar && id) {
         setDisableButton(true);
-         const accountID = await getDocs(collection(DB, `userData/${id}/user/`)).then(
-           (res) => res.docs[0].id,
-         );
+        const accountID = await getDocs(collection(DB, `userData/${id}/user/`)).then(
+          (res) => res.docs[0].id,
+        );
 
         if (photo.includes('firebase') && photo !== null) {
           const currentPhotoName = photo.split('%2F')[2].split('?')[0];
           const deleteLink = ref(storageRef, `${id}/avatar/${currentPhotoName}`);
-           deleteObject(deleteLink);
+          deleteObject(deleteLink);
         }
         const avatarLink = ref(storageRef, `${id}/avatar/${avatar.name}`);
 
@@ -178,7 +178,7 @@ const Settings = () => {
           validate();
         }}>
         <fieldset className={styles.avatar_wrapper}>
-          <img className={styles.avatar} src={photo ?? avatarPlaceholder } alt="Аватарка" />
+          <img className={styles.avatar} src={photo ?? avatarPlaceholder} alt="Аватарка" />
           <input
             className={styles.hidden}
             ref={avatarRef}
@@ -189,6 +189,7 @@ const Settings = () => {
             onChange={() => setFileChanged((state) => !state)}
           />
           <button
+            type="button"
             disabled={disableButton}
             className={styles.avatar_upload_button}
             onClick={() => avatarRef.current?.click()}>

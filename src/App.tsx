@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './hooks/storeHook';
 import { getTaskList } from './Redux/tasksSlice';
-import { getUser, userSliceSelector } from './Redux/userSlice';
+import { getUser, removeUser, userSliceSelector } from './Redux/userSlice';
 
 import MainLayout from './layouts/MainLayout';
 import Calendar from './pages/Calendar';
@@ -15,16 +15,21 @@ import Settings from './pages/Settings';
 import Stats from './pages/Stats';
 
 import styles from './App.module.scss';
+import { toggleTheme } from './Redux/settingsSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuth } = useAppSelector(userSliceSelector);
+  const { theme } = useAppSelector(state => state.settingsSlice);
+
+  const localTheme = localStorage.getItem("theme")
 
   React.useEffect(() => {
     dispatch(getTaskList());
     dispatch(getUser());
+    !localTheme && dispatch(toggleTheme());
     if (!isAuth) {
       navigate('login');
     }
@@ -35,7 +40,7 @@ function App() {
   }, [isAuth]);
 
   return (
-    <div className={styles.App}>
+    <div className={styles.App} data-theme={theme}>
       <Routes>
         <Route path="" element={<MainLayout />}>
           <Route path="" element={<Overview />} />

@@ -35,7 +35,7 @@ const Overview = () => {
   }
 
   return (
-    <section className={styles.overview}>
+    <section className={styles.overview} >
       <div
         className={styles.current_tasks_block}
         onDragOverCapture={(e) => {

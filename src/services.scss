@@ -1,14 +1,69 @@
-$background-color: #fefefe;
-$card-block-background-color: #f5f9f9;
-$card-background-color: #ffffff;
-$card-add-background-color: #e9f1f0;
-$card-add-hover-color: #e9f6f1;
-$task-background-color: #ffffff;
-$text-color: #000000;
-$text-unactive-color: #c0c0c0;
-$button-color: hsl(136, 74%, 73%);
-$button-color-active: hsl(136, 74%, 43%);
-$box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
+[data-theme='light'] {
+  --body-background: hsl(290, 15%, 99%);
+  --background-color: hsl(290, 15%, 97%);
+  --header-color: hsl(290, 15%, 97%);
+  --card-block-background-color: hsl(290, 15%, 95%);
+  --card-background-color: hsl(290, 15%, 100%);
+  --card-add-background-color: hsl(290, 15%, 80%);
+  --card-add-hover-color: hsl(290, 15%, 70%);
+  --task-background-color: hsl(290, 15%, 95%);
+  --text-color: rgb(24, 24, 27);
+  --text-color-2: hsl(290, 15%, 10%);
+  --text-unactive-color: hsl(290, 15%, 60%);
+  --button-color: hsl(290, 15%, 73%);
+  --button-color-active: hsl(290, 15%, 43%);
+  --box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
+
+  --button-color: hsl(290, 15%, 100%);
+  --button-text-color: hsl(290, 15%, 10%);
+  --button-color-active: hsl(290, 15%, 10%);
+  --button-text-active-color: hsl(290, 15%, 100%);
+}
+
+// БЕЛАЯ ТЕМА
+// [data-theme='light'] {
+//   --body-background: hsl(214, 3%, 99%);
+//   --background-color: hsl(214, 3%, 97%);
+//   --header-color: hsl(214, 3%, 97%);
+//   --card-block-background-color: hsl(214, 3%, 95%);
+//   --card-background-color: hsl(214, 3%, 100%);
+//   --card-add-background-color: hsl(214, 3%, 80%);
+//   --card-add-hover-color: hsl(214, 3%, 70%);
+//   --task-background-color: hsl(214, 3%, 95%);
+//   --text-color: hsl(240, 4%, 10%);
+//   --text-color-2: hsl(214, 3%, 10%);
+//   --text-unactive-color: hsl(214, 3%, 60%);
+//   --button-color: hsl(214, 3%, 73%);
+//   --button-color-active: hsl(214, 3%, 43%);
+//   --box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
+
+//   --button-color: hsl(214, 3%, 100%);
+//   --button-text-color: hsl(214, 3%, 10%);
+//   --button-color-active: hsl(214, 3%, 10%);
+//   --button-text-active-color: hsl(214, 3%, 100%);
+// }
+
+[data-theme='dark'] {
+  --body-background: hsl(214, 3%, 35%);
+  --background-color: hsl(214, 3%, 30%);
+  --header-color: hsl(214, 3%, 30%);
+  --card-block-background-color: hsl(214, 3%, 65%);
+  --card-background-color: hsl(214, 3%, 90%);
+  --card-add-background-color: hsl(214, 3%, 40%);
+  --card-add-hover-color: hsl(214, 3%, 60%);
+  --task-background-color: hsl(214, 3%, 95%);
+  --text-color: hsl(240, 4%, 95%);
+  --text-color-2: hsl(214, 3%, 10%);
+  --text-unactive-color: hsl(214, 3%, 75%);
+  --button-color: hsl(214, 3%, 73%);
+  --button-color-active: hsl(214, 3%, 43%);
+  --box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
+
+  --button-color: hsl(214, 3%, 90%);
+  --button-text-color: hsl(214, 3%, 10%);
+  --button-color-active: hsl(214, 3%, 10%);
+  --button-text-active-color: hsl(214, 3%, 90%);
+}
 
 @mixin flexBetween($type) {
   @if $type == 'column' {
@@ -17,7 +72,7 @@ $box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
     justify-content: space-between;
     align-items: flex-start;
   }
-  @if $type == "row" {
+  @if $type == 'row' {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -32,7 +87,7 @@ $box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
     justify-content: center;
     align-items: center;
   }
-  @if $type == "row" {
+  @if $type == 'row' {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -47,7 +102,7 @@ $box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
     justify-content: flex-start;
     align-items: center;
   }
-  @if $type == "row" {
+  @if $type == 'row' {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -59,5 +114,5 @@ $box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.21);
   padding: 30px;
   width: 100%;
   height: 100%;
-  grid-area: content;  
+  grid-area: content;
 }

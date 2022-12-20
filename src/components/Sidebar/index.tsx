@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks/storeHook';
-import { clearInputs } from '../../Redux/settingsSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
+import { clearInputs, toggleTheme } from '../../Redux/settingsSlice';
 import { removeUser } from '../../Redux/userSlice';
 
 import styles from './Sidebar.module.scss';
@@ -8,6 +8,7 @@ import styles from './Sidebar.module.scss';
 const Sidebar = () => {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
+  const {theme} = useAppSelector(state => state.settingsSlice)
 
   return (
     <section className={styles.sidebar}>
@@ -20,13 +21,13 @@ const Sidebar = () => {
             <Link
               to="overview"
               className={pathname.endsWith('overview') ? styles.active : undefined}>
-              <i className="fa-solid fa-house"></i>
+              <span className={styles.icon + ' ' + styles.home_icon}></span>
               Основная
             </Link>
           </li>
           <li>
             <Link to="stats" className={pathname.endsWith('stats') ? styles.active : undefined}>
-              <i className="fa-solid fa-chart-simple"></i>
+              <span className={styles.icon + ' ' + styles.stats_icon}></span>
               Статистика
             </Link>
           </li>
@@ -34,13 +35,13 @@ const Sidebar = () => {
             <Link
               to="projects"
               className={pathname.endsWith('projects') ? styles.active : undefined}>
-              <i className="fa-solid fa-folder-open"></i>
+              <span className={styles.icon + ' ' + styles.project_icon}></span>
               Проекты
             </Link>
           </li>
           <li>
             <Link to="chat" className={pathname.endsWith('chat') ? styles.active : undefined}>
-              <i className="fa-regular fa-comment-dots"></i>
+              <span className={styles.icon + ' ' + styles.chat_icon}></span>
               Чат
             </Link>
           </li>
@@ -48,31 +49,38 @@ const Sidebar = () => {
             <Link
               to="calendar"
               className={pathname.endsWith('calendar') ? styles.active : undefined}>
-              <i className="fa-regular fa-calendar"></i>
+              <span className={styles.icon + ' ' + styles.calendar_icon}></span>
               Календарь
             </Link>
           </li>
         </ul>
         <ul>
+          <li className={styles.theme_switcher}>
+            <span
+              onClick={() => dispatch(toggleTheme())}
+              className={`${styles.switch} ${theme === 'dark' ? styles.active : ''}`}></span>
+            Тема
+          </li>
           <li>
             <Link
               to="settings"
               className={pathname.endsWith('settings') ? styles.active : undefined}>
-              <i className="fa-solid fa-gear"></i>
+              <span className={styles.icon + ' ' + styles.settings_icon}></span>
               Настройки
             </Link>
           </li>
-          <li onClick={() => {dispatch(removeUser()); dispatch(clearInputs())}}>
+          <li
+            onClick={() => {
+              dispatch(removeUser());
+              dispatch(clearInputs());
+            }}>
             <Link to="login" className={pathname.endsWith('login') ? styles.active : undefined}>
-              {<i className="fa-solid fa-arrow-right-to-bracket"></i> && (
-                <i className="fa-solid fa-arrow-right-from-bracket"></i>
-              )}
+              <span className={styles.icon + ' ' + styles.logout_icon}></span>
               Выйти
             </Link>
           </li>
         </ul>
       </nav>
-     
     </section>
   );
 };

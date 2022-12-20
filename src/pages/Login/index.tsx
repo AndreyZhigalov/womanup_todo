@@ -73,7 +73,7 @@ const Login = () => {
           type="email"
           name="email"
           id="email"
-          placeholder="email"
+          placeholder="Email"
         />
         <span className={styles.login_error}>{emailError}</span>
         <input
@@ -83,17 +83,16 @@ const Login = () => {
           type="password"
           name="password"
           id="password"
-          placeholder="password"
+          placeholder="Пароль"
         />
         <span className={styles.login_error}>{passwordError}</span>
         <button type="submit" >
-          login
+          Войти
         </button>
-        <span>или</span>
-        <button aria-labelledby="google" onClick={() => dispatch(googleLogin())}>
+        <button aria-labelledby="google" type="button" onClick={() => dispatch(googleLogin())}>
           <img src={googleIcon} alt="" />
         </button>
-        <Link to="../register">или зарегистрироваться</Link>
+        <Link to="../register">или создать аккаунт</Link>
       </form>
     </div>
   );

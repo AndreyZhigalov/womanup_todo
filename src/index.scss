@@ -1,3 +1,5 @@
+@import "./services.scss";
+
 * {
   box-sizing: border-box;
   text-decoration: none;
@@ -6,7 +8,8 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-family: 'Noto Sans', sans-serif;
+  font-family: 'Philosopher', sans-serif;
+ 
 }
 
 html {
@@ -20,17 +23,17 @@ body {
   width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+ 
 }
 
 #root {
   height: 100%;
   width: 100%;
+  
 }
 
-@for $key from 1 through 6 {
-  H#{$key} {
-    font-size: 32 / $key;
-  }
+h1,h2,h3,h4,h5,h6 {
+  font-weight: 700;
 }
 
 i {

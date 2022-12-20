@@ -5,6 +5,7 @@
 }
 .header {
   margin-bottom: 30px;
+  color: var(--text-color);
 }
 
 .form {
@@ -27,11 +28,13 @@
     padding: 5px 10px;
     border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.253);
-    background-color: white;
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    font-size: 16px;
     cursor: pointer;
     &:active {
-      background-color: rgb(80, 80, 80);
-      color: white;
+      background-color: var(--button-color-active);
+      color: var(--button-text-active-color);
     }
   }
   .hidden {
@@ -56,7 +59,7 @@
   gap: 10px;
   width: 100%;
   max-width: 640px;
-  background-color: $card-block-background-color;
+  background-color: var(--card-block-background-color);
   border-radius: 10px;
 }
 
@@ -64,12 +67,14 @@
   @include flexBetween('row');
   width: 100%;
   font-size: 20px;
+  color: var(--text-color-2);
 }
 .input {
-  padding: 0 15px;
+  padding: 5px 15px;
   font-size: 20px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.157);
+  color: var(--text-color-2);
   &:focus {
     outline: 3px solid black;
   }
@@ -78,10 +83,12 @@
   padding: 10px 20px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.088);
-  background-color: $button-color;
+  background-color: var(--button-color);
+  color: var(--button-text-color);
   font-size: 16px;
   cursor: pointer;
   &:active {
-    background-color: $button-color-active;
+    background-color: var(--button-color-active);
+    color: var(--button-text-active-color);
   }
 }

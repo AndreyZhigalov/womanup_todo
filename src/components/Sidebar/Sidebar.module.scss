@@ -5,14 +5,17 @@
   width: 100%;
   max-width: 240px;
   height: 100%;
-  border-right: 3px solid rgb(242, 242, 242);
+  border-right: 3px solid var(--body-background);
   grid-area: sidebar;
   padding: 20px 10px 20px 30px;
   display: flex;
   flex-direction: column;
+  background-color: var(--background-color);
   .logo {
+    font-size: 30px;
+    color: var(--text-color);
     span {
-      font-size: 20px;
+      font-size: 16px;
     }
   }
   .nav_panel {
@@ -22,18 +25,95 @@
   }
   ul {
     @include flexBetween('column');
+    .theme_switcher {
+      padding-left: 0;
+      .switch {
+        position: absolute;
+        left: 55px;
+        width: 50px;
+        height: 25px;
+        border: 1px solid var(--text-color);
+        border-radius: 20px;
+        background-color: var(--body-background);
+        &::before {
+          content: '';
+          position: absolute;
+          height: 19px;
+          width: 19px;
+          top: 2px;
+          border-radius: 50%;
+          background-color: var(--text-color);
+          transform: translateX(2px);
+          transition: transform 0.3s;
+        }
+      }
+      .active {
+        &::before {
+          content: '';
+          position: absolute;
+          top: 2px;
+          height: 19px;
+          width: 19px;
+          border-radius: 50%;
+          background-color: var(--text-color);
+          transform: translateX(28px);
+          transition: transform 0.3s;
+        }
+      }
+    }
+
     li {
+      position: relative;
+      font-size: 20px;
+      padding-left: 30px;
+      color: var(--text-unactive-color);
       i {
         margin-right: 10px;
       }
       margin: 5px 0;
       a {
-        font-size: 16px;
-        color: $text-unactive-color;
+        color: currentColor;
+        .icon {
+          position: absolute;
+          left: 0;
+          width: 20px;
+          height: 20px;
+          object-fit: contain;
+          background-size: contain;
+          background: unset center center no-repeat;
+          filter: invert(8%) sepia(1%) saturate(5856%) hue-rotate(167deg) brightness(78%)
+            contrast(93%);
+        }
+        .home_icon {
+          background-image: url(../../assets/icons/home.png);
+        }
+        .stats_icon {
+          background-image: url(../../assets/icons/stats.png);
+        }
+        .project_icon {
+          background-image: url(../../assets/icons/folder.png);
+        }
+        .chat_icon {
+          background-image: url(../../assets/icons/chat.png);
+        }
+        .calendar_icon {
+          background-image: url(../../assets/icons/calendar.png);
+        }
+        .settings_icon {
+          background-image: url(../../assets/icons/settings.png);
+        }
+        .logout_icon {
+          background-image: url(../../assets/icons/logout.png);
+        }
       }
       .active {
-        color: $text-color;
+        color: var(--text-color);
       }
     }
+  }
+}
+[data-theme='dark'] {
+  .icon {
+    filter: invert(94%) sepia(0%) saturate(4815%) hue-rotate(157deg) brightness(130%) contrast(90%);
   }
 }
