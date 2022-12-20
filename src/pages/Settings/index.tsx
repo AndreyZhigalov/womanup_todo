@@ -18,6 +18,8 @@ import {
   setPasswordMatchError,
   setRepeatNewPasswordInput,
   setSettingsInitialState,
+  setUploadingStatus,
+  UserdataUpdateStatus,
 } from '../../Redux/settingsSlice';
 import { setEmail, setLastname, setName, setPhoto, userSliceSelector } from '../../Redux/userSlice';
 
@@ -44,6 +46,7 @@ const Settings = () => {
     currentPasswordError,
     passwordMatchError,
     passwordError,
+    status,
   } = useAppSelector((state) => state.settingsSlice);
 
   const avatarRef = React.useRef<HTMLInputElement>(null);
@@ -77,6 +80,7 @@ const Settings = () => {
     (async () => {
       if (avatar && id) {
         setDisableButton(true);
+        dispatch(setUploadingStatus(UserdataUpdateStatus.UPLOADING));
         const accountID = await getDocs(collection(DB, `userData/${id}/user/`)).then(
           (res) => res.docs[0].id,
         );
@@ -98,8 +102,10 @@ const Settings = () => {
                 photo: url,
               });
               dispatch(setPhoto(url));
+              dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
             });
           } catch (error) {
+            dispatch(setUploadingStatus(UserdataUpdateStatus.ERROR));
             alert('Аватар не обновился');
           }
         } else {
@@ -111,6 +117,7 @@ const Settings = () => {
   }, [fileChanged]);
 
   const validate = async () => {
+    // ВАЛИДАЦИЯ
     let nameValid = /^[а-яёА-Яёa-zA-Z]+$/.test(nameInput as string);
     let lastnameValid = /^[а-яёА-Яёa-zA-Z]+$/.test(lastnameInput as string);
     let emailValid = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
@@ -119,15 +126,16 @@ const Settings = () => {
     let newPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
       newPasswordInput as string,
     );
-
+    // ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
     const accountData = await getDocs(collection(DB, `userData/${id}/user/`)).then(
       (res) => res.docs[0],
     );
     const accountID = accountData.id;
     const pass = accountData.data().password;
-
+    // ОБНОВЛЕНИЕ ПАРОЛЯ
     if (currentPasswordInput === pass) {
       dispatch(setCurrentPasswordError(false));
+      dispatch(setUploadingStatus(UserdataUpdateStatus.UPLOADING));
       if (newPassword && newPasswordInput === repeatNewPasswordInput) {
         dispatch(setPasswordMatchError(false));
         user && (await updatePassword(user, newPasswordInput));
@@ -135,36 +143,52 @@ const Settings = () => {
           password: newPasswordInput,
         });
         dispatch(clearInputs());
+        dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
       } else {
+        dispatch(setUploadingStatus(UserdataUpdateStatus.ERROR));
         dispatch(setPasswordMatchError(true));
       }
     } else {
-      dispatch(setCurrentPasswordError(true));
+      currentPasswordInput.length && dispatch(setCurrentPasswordError(true));
     }
-
+    // ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
     nameValid ? dispatch(setNameError(false)) : dispatch(setNameError(true));
-
     lastnameValid
       ? dispatch(setLastnameError(false))
       : !lastnameInput.length
       ? dispatch(setLastnameError(false))
       : dispatch(setLastnameError(true));
-
     emailValid ? dispatch(setEmailError(false)) : dispatch(setEmailError(true));
 
     if (nameValid && emailValid && (lastnameValid || !lastnameInput.length)) {
       setDisableButton(true);
-      updateDoc(doc(DB, `userData/${id}/user/${accountID}`), {
-        name: nameInput,
-        lastname: lastnameInput,
-        email: emailInput,
-      });
-      user && updateProfile(user, { displayName: `${nameInput} ${lastnameInput}` });
-      user && updateEmail(user, emailInput);
-      dispatch(setName(nameInput));
-      dispatch(setLastname(lastnameInput));
-      dispatch(setEmail(emailInput));
-      setDisableButton(false);
+      dispatch(setUploadingStatus(UserdataUpdateStatus.UPLOADING));
+
+      try {
+        updateDoc(doc(DB, `userData/${id}/user/${accountID}`), {
+          name: nameInput,
+          lastname: lastnameInput,
+          email: emailInput,
+        });
+
+        user &&
+          updateProfile(user, { displayName: `${nameInput} ${lastnameInput}` }).then(() => {
+            setDisableButton(false);
+            dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
+          });
+
+        user &&
+          updateEmail(user, emailInput).then(() => {
+            setDisableButton(false);
+            dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
+          });
+          
+        dispatch(setName(nameInput));
+        dispatch(setLastname(lastnameInput));
+        dispatch(setEmail(emailInput));
+      } catch (error) {
+        dispatch(setUploadingStatus(UserdataUpdateStatus.ERROR));
+      }
     }
   };
 
@@ -191,7 +215,9 @@ const Settings = () => {
           <button
             type="button"
             disabled={disableButton}
-            className={styles.avatar_upload_button}
+            className={`${styles.avatar_upload_button} ${
+              status === UserdataUpdateStatus.UPLOADING && styles.button_uploading_animation
+            }`}
             onClick={() => avatarRef.current?.click()}>
             Обновить
           </button>
@@ -279,10 +305,15 @@ const Settings = () => {
             />
           </label>
         </fieldset>
-        <button disabled={disableButton} type="submit" className={styles.submit_button}>
+        <button
+          disabled={status === UserdataUpdateStatus.UPLOADING}
+          type="submit"
+          className={`${styles.submit_button} ${
+            status === UserdataUpdateStatus.UPLOADING && styles.button_uploading_animation
+          }`}>
           Сохранить
         </button>
-      </form>     
+      </form>
     </section>
   );
 };

@@ -46,6 +46,7 @@
     position: absolute;
   }
 }
+
 .error {
   font-size: 12px;
   color: rgb(200, 0, 0);
@@ -69,6 +70,7 @@
   font-size: 20px;
   color: var(--text-color-2);
 }
+
 .input {
   padding: 5px 15px;
   font-size: 20px;
@@ -79,6 +81,7 @@
     outline: 3px solid black;
   }
 }
+
 .submit_button {
   padding: 10px 20px;
   border-radius: 5px;
@@ -90,5 +93,24 @@
   &:active {
     background-color: var(--button-color-active);
     color: var(--button-text-active-color);
+  }
+}
+
+.button_uploading_animation {
+  animation: submitAnimation 2s ease-out infinite;
+}
+
+@keyframes submitAnimation {
+  0% {
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+  }
+  50% {
+    color: var(--button-text-active-color);
+    background-color: var(--button-color-active);
+  }
+  100% {
+    color: var(--button-text-color);
+    background-color: var(--button-color);
   }
 }

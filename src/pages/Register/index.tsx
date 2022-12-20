@@ -100,7 +100,7 @@ const Register = () => {
           type="text"
           name="name"
           id="name"
-          placeholder="Имя"
+          placeholder="Имя*"
           maxLength={40}
         />
         <span className={styles.register_error}>{nameError}</span>
@@ -122,7 +122,7 @@ const Register = () => {
           type="email"
           name="email"
           id="email"
-          placeholder="Email"
+          placeholder="Email*"
           maxLength={40}
         />
         <span className={styles.register_error}>{emailError}</span>
@@ -133,7 +133,7 @@ const Register = () => {
           type="password"
           name="password"
           id="password"
-          placeholder="Пароль"
+          placeholder="Пароль*"
           maxLength={30}
         />
         <span className={styles.register_error}>{passwordError}</span>

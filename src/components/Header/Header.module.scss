@@ -1,14 +1,15 @@
 @import '../../services.scss';
 
 .header {
+  z-index: 9990;
   position: fixed;
   padding: 20px 30px;
   width: calc(100% - 240px);
+  min-width: calc(1024px - 240px);
   height: max-content;
-  z-index: 9990;
-  grid-area: header;
   @include flexBetween('row');
-  justify-self: end;
+  justify-self: flex-end;
+  grid-area: header;
   color: var(--text-color);
   background-color: var(--header-color);
   .search_block {

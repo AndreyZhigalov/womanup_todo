@@ -16,7 +16,15 @@ export type settingsSliceType = {
   passwordMatchError: boolean;
   passwordError: boolean;
   theme: string;
+  status: string;
 };
+
+export enum UserdataUpdateStatus {
+  WAITING = "Waiting for user data updating",
+  ERROR = "User data updating failed",
+  UPLOADING = "User data uploading to DB",
+  SUCCESS = "User data have been uploaded"
+}
 
 type ErrorsType = {
   avatar: string;
@@ -52,6 +60,7 @@ const initialState: settingsSliceType = {
   passwordMatchError: false,
   passwordError: false,
   theme: 'light',
+  status: UserdataUpdateStatus.WAITING
 };
 
 const settingsSlice = createSlice({
@@ -120,6 +129,9 @@ const settingsSlice = createSlice({
       localStorage.setItem('theme', theme);
       state.theme = theme;
     },
+    setUploadingStatus(state, action : PayloadAction<string>) {
+      state.status = action.payload
+    }
   },
 });
 
@@ -141,6 +153,7 @@ export const {
   clearInputs,
   toggleTheme,
   setTheme,
+  setUploadingStatus,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

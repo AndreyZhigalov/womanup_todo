@@ -1,15 +1,16 @@
 @import '../../services.scss';
 
 .sidebar {
+  z-index: 9990;
   position: fixed;
+  padding: 20px 10px 20px 30px;
+  display: flex;
+  flex-direction: column;
+  grid-area: sidebar;
   width: 100%;
   max-width: 240px;
   height: 100%;
   border-right: 3px solid var(--body-background);
-  grid-area: sidebar;
-  padding: 20px 10px 20px 30px;
-  display: flex;
-  flex-direction: column;
   background-color: var(--background-color);
   .logo {
     font-size: 30px;

@@ -6,18 +6,17 @@ import { userSliceSelector } from '../../Redux/userSlice';
 import avatarPlaceholder from '../../assets/avatar_placeholder.png';
 
 import styles from './Header.module.scss';
-import { useLocation } from 'react-router-dom';
+import {  useParams } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useAppDispatch();
-  const {pathname} = useLocation()
   const input = useAppSelector((state) => state.searchSlice.input);
   const { name, lastname, photo } = useAppSelector(userSliceSelector);
   const inputRef = React.useRef<HTMLInputElement>(null);
-  
+  const params = useParams();
   return (
     <header className={styles.header}>
-      {pathname.includes('overview') && (
+      {(params['*']?.startsWith('overview') || params['*'] === '') && (
         <div className={styles.search_block}>
           <i className={styles.search_icon + ' fa-solid fa-magnifying-glass'}></i>
           <input
@@ -39,9 +38,10 @@ const Header = () => {
         <i className={styles.notice + ' fa-regular fa-bell'}></i>
         <div className={styles.name_and_options}>
           <h4>{name + ' ' + lastname}</h4>
-        </div>       
+        </div>
         <img src={photo || avatarPlaceholder} alt="" className={styles.avatar} />
       </div>
+     
     </header>
   );
 };
