@@ -115,6 +115,11 @@ const settingsSlice = createSlice({
       localStorage.setItem('theme', theme);
       state.theme = theme;
     },
+    setTheme(state, action: PayloadAction<string>) {
+      const theme = action.payload
+      localStorage.setItem('theme', theme);
+      state.theme = theme;
+    },
   },
 });
 
@@ -135,6 +140,7 @@ export const {
   setPasswordError,
   clearInputs,
   toggleTheme,
+  setTheme,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

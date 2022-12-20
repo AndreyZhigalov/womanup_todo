@@ -81,10 +81,17 @@ const Register = () => {
 
   return (
     <div className={styles.register_page}>
-      {status === AuthStatus.LOADING && <div className={loaderStyle.loading_auth__overlay}>
-        <span className={loaderStyle.loader}></span>
-      </div>}
-      <form className={styles.wrapper} onSubmit={(e) => {e.preventDefault(); validate()}}>
+      {status === AuthStatus.LOADING && (
+        <div className={loaderStyle.loading_auth__overlay}>
+          <span className={loaderStyle.loader}></span>
+        </div>
+      )}
+      <form
+        className={styles.wrapper}
+        onSubmit={(e) => {
+          e.preventDefault();
+          validate();
+        }}>
         <h1>WomanUP todo</h1>
         <input
           ref={nameInputRef}
@@ -94,6 +101,7 @@ const Register = () => {
           name="name"
           id="name"
           placeholder="Имя"
+          maxLength={40}
         />
         <span className={styles.register_error}>{nameError}</span>
         <input
@@ -104,6 +112,7 @@ const Register = () => {
           name="lastname"
           id="lastname"
           placeholder="Фамилия"
+          maxLength={40}
         />
         <span className={styles.register_error}>{lastnameError}</span>
         <input
@@ -114,6 +123,7 @@ const Register = () => {
           name="email"
           id="email"
           placeholder="Email"
+          maxLength={40}
         />
         <span className={styles.register_error}>{emailError}</span>
         <input
@@ -124,6 +134,7 @@ const Register = () => {
           name="password"
           id="password"
           placeholder="Пароль"
+          maxLength={30}
         />
         <span className={styles.register_error}>{passwordError}</span>
         <button type="submit">Создать аккаунт</button>

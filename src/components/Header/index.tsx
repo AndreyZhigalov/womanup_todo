@@ -14,7 +14,7 @@ const Header = () => {
   const input = useAppSelector((state) => state.searchSlice.input);
   const { name, lastname, photo } = useAppSelector(userSliceSelector);
   const inputRef = React.useRef<HTMLInputElement>(null);
-
+  
   return (
     <header className={styles.header}>
       {pathname.includes('overview') && (
@@ -39,8 +39,8 @@ const Header = () => {
         <i className={styles.notice + ' fa-regular fa-bell'}></i>
         <div className={styles.name_and_options}>
           <h4>{name + ' ' + lastname}</h4>
-        </div>
-        <img src={photo ?? avatarPlaceholder} alt="" className={styles.avatar} />
+        </div>       
+        <img src={photo || avatarPlaceholder} alt="" className={styles.avatar} />
       </div>
     </header>
   );

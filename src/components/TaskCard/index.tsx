@@ -114,7 +114,6 @@ const TaskCard: React.FC<TaskCardType> = ({
   };
 
   const setTaskToNewGroup = () => {
-    console.log(droppedGroup);
     dispatch(setTaskGroup([taskID, droppedGroup as string]));
     dispatch(
       updateTask({
@@ -137,7 +136,7 @@ const TaskCard: React.FC<TaskCardType> = ({
       }}
       onDragEnd={setTaskToNewGroup}
       onKeyDown={(e) => e.code === 'Escape' && setIsEditable(false)}
-      draggable>
+      draggable={!isEditable}>
       {!isEditable ? (
         <h5 className={styles.card_header}>{headerText}</h5>
       ) : (

@@ -1,13 +1,14 @@
 @import '../../services.scss';
 
 .register_page {
+  position: fixed;
+  inset: 0 0 0 0;
   @include flexCenter('column');
   height: 100%;
   width: 100%;
   background-color: var(--background-color);
   .wrapper {
     @include flexCenter('column');
-
     gap: 15px;
     background-color: var(--card-block-background-color);
     padding: 30px;

@@ -178,7 +178,7 @@ const Settings = () => {
           validate();
         }}>
         <fieldset className={styles.avatar_wrapper}>
-          <img className={styles.avatar} src={photo ?? avatarPlaceholder} alt="Аватарка" />
+          <img className={styles.avatar} src={photo || avatarPlaceholder} alt="Аватарка" />
           <input
             className={styles.hidden}
             ref={avatarRef}
@@ -204,6 +204,7 @@ const Settings = () => {
               ref={nameRef}
               className={styles.input}
               type="text"
+              maxLength={40}
               onChange={() => dispatch(setNameInput(nameRef.current?.value as string))}
               value={nameInput}
             />
@@ -215,6 +216,7 @@ const Settings = () => {
               ref={lastnameRef}
               className={styles.input}
               type="text"
+              maxLength={40}
               onChange={() => dispatch(setLastnameInput(lastnameRef.current?.value as string))}
               value={lastnameInput}
             />
@@ -226,6 +228,7 @@ const Settings = () => {
               ref={emailRef}
               className={styles.input}
               type="text"
+              maxLength={40}
               onChange={() => dispatch(setEmailInput(emailRef.current?.value as string))}
               value={emailInput}
             />
@@ -239,6 +242,7 @@ const Settings = () => {
               ref={currentPasswordRef}
               className={styles.input}
               type="password"
+              maxLength={30}
               onChange={() =>
                 dispatch(setCurrentPasswordInput(currentPasswordRef.current?.value as string))
               }
@@ -252,6 +256,7 @@ const Settings = () => {
               ref={newPasswordRef}
               className={styles.input}
               type="password"
+              maxLength={30}
               onChange={() =>
                 dispatch(setNewPasswordInput(newPasswordRef.current?.value as string))
               }
@@ -266,6 +271,7 @@ const Settings = () => {
               ref={repeatNewPasswordRef}
               className={styles.input}
               type="password"
+              maxLength={30}
               onChange={() =>
                 dispatch(setRepeatNewPasswordInput(repeatNewPasswordRef.current?.value as string))
               }
@@ -276,7 +282,7 @@ const Settings = () => {
         <button disabled={disableButton} type="submit" className={styles.submit_button}>
           Сохранить
         </button>
-      </form>
+      </form>     
     </section>
   );
 };

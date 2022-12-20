@@ -64,7 +64,12 @@ const Login = () => {
           <span className={loaderStyle.loader}></span>
         </div>
       )}
-      <form className={styles.wrapper} onSubmit={(e) =>{ e.preventDefault(); validate()}}>
+      <form
+        className={styles.wrapper}
+        onSubmit={(e) => {
+          e.preventDefault();
+          validate();
+        }}>
         <h1>WomanUP todo</h1>
         <input
           ref={emailInputRef}
@@ -74,6 +79,7 @@ const Login = () => {
           name="email"
           id="email"
           placeholder="Email"
+          maxLength={40}
         />
         <span className={styles.login_error}>{emailError}</span>
         <input
@@ -84,11 +90,10 @@ const Login = () => {
           name="password"
           id="password"
           placeholder="Пароль"
+          maxLength={30}
         />
         <span className={styles.login_error}>{passwordError}</span>
-        <button type="submit" >
-          Войти
-        </button>
+        <button type="submit">Войти</button>
         <button aria-labelledby="google" type="button" onClick={() => dispatch(googleLogin())}>
           <img src={googleIcon} alt="" />
         </button>
