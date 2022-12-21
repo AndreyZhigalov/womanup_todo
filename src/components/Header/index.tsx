@@ -2,11 +2,11 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
 import { clearInput, setInput } from '../../Redux/searchSlice';
 import { userSliceSelector } from '../../Redux/userSlice';
+import {  useParams } from 'react-router-dom';
 
 import avatarPlaceholder from '../../assets/avatar_placeholder.png';
 
 import styles from './Header.module.scss';
-import {  useParams } from 'react-router-dom';
 
 const Header = () => {
   const dispatch = useAppDispatch();
@@ -14,9 +14,10 @@ const Header = () => {
   const { name, lastname, photo } = useAppSelector(userSliceSelector);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const params = useParams();
+  
   return (
     <header className={styles.header}>
-      {(params['*']?.startsWith('overview') || params['*'] === '') && (
+      {(params['*']?.startsWith('overview') || !params['*']) && (
         <div className={styles.search_block}>
           <i className={styles.search_icon + ' fa-solid fa-magnifying-glass'}></i>
           <input

@@ -1,10 +1,12 @@
+import React from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
 import { collection, doc, getDocs, updateDoc } from 'firebase/firestore/lite';
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import React from 'react';
 import { DB, storageRef, user } from '../../firebase';
-import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
+import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import {
   clearInputs,
+  clearSettingErrors,
   setAvatarError,
   setCurrentPasswordError,
   setCurrentPasswordInput,
@@ -18,6 +20,7 @@ import {
   setPasswordMatchError,
   setRepeatNewPasswordInput,
   setSettingsInitialState,
+  settingsSliceSelector,
   setUploadingStatus,
   UserdataUpdateStatus,
 } from '../../Redux/settingsSlice';
@@ -26,7 +29,6 @@ import { setEmail, setLastname, setName, setPhoto, userSliceSelector } from '../
 import avatarPlaceholder from '../../assets/avatar_placeholder.png';
 
 import styles from './Settings.module.scss';
-import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 
 const Settings = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +49,7 @@ const Settings = () => {
     passwordMatchError,
     passwordError,
     status,
-  } = useAppSelector((state) => state.settingsSlice);
+  } = useAppSelector(settingsSliceSelector);
 
   const avatarRef = React.useRef<HTMLInputElement>(null);
   const nameRef = React.useRef<HTMLInputElement>(null);
@@ -61,12 +63,7 @@ const Settings = () => {
   const [disableButton, setDisableButton] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    dispatch(setAvatarError(false));
-    dispatch(setCurrentPasswordError(false));
-    dispatch(setEmailError(false));
-    dispatch(setLastnameError(false));
-    dispatch(setNameError(false));
-    dispatch(setPasswordMatchError(false));
+    dispatch(clearSettingErrors());
   }, []);
 
   React.useEffect(() => {

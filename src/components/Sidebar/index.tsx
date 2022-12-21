@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
-import { clearInputs, toggleTheme } from '../../Redux/settingsSlice';
+import { clearInputs, settingsSliceSelector, toggleTheme } from '../../Redux/settingsSlice';
 import { removeUser } from '../../Redux/userSlice';
 
 import styles from './Sidebar.module.scss';
@@ -8,7 +8,7 @@ import styles from './Sidebar.module.scss';
 const Sidebar = () => {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const {theme} = useAppSelector(state => state.settingsSlice)
+  const { theme } = useAppSelector(settingsSliceSelector);
 
   return (
     <section className={styles.sidebar}>

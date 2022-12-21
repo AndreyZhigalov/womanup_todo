@@ -15,21 +15,24 @@ import Settings from './pages/Settings';
 import Stats from './pages/Stats';
 
 import styles from './App.module.scss';
-import { setTheme } from './Redux/settingsSlice';
+import { setTheme, settingsSliceSelector } from './Redux/settingsSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuth } = useAppSelector(userSliceSelector);
-  const { theme } = useAppSelector((state) => state.settingsSlice);
+  const { theme } = useAppSelector(settingsSliceSelector);
 
   const localTheme = localStorage.getItem('theme');
 
   React.useEffect(() => {
     dispatch(getTaskList());
     dispatch(getUser()); 
-    if (localTheme) dispatch(setTheme(localTheme));
+    if (localTheme) dispatch(setTheme(localTheme));   
+  }, []);
+
+  React.useEffect(() => {    
     if (!isAuth) {
       navigate('login');
     }

@@ -42,7 +42,7 @@ const Overview = () => {
           e.preventDefault();
           setDroppedGroup('current');
         }}>
-        <h4 className={styles.tasks_block_header}>Текущие задачи</h4>
+        <h4 className={styles.tasks_block_header}>Текущие</h4>
         <button className={styles.add_task_button} onClick={() => addTask('current')}>
           +
         </button>
@@ -61,7 +61,7 @@ const Overview = () => {
           e.preventDefault();
           setDroppedGroup('future');
         }}>
-        <h4 className={styles.tasks_block_header}>Задачи в очереди</h4>
+        <h4 className={styles.tasks_block_header}>В очереди</h4>
         <button className={styles.add_task_button} onClick={() => addTask('future')}>
           +
         </button>
@@ -80,7 +80,7 @@ const Overview = () => {
           e.preventDefault();
           setDroppedGroup('completed');
         }}>
-        <h4 className={styles.tasks_block_header}>Выполненные задачи</h4>
+        <h4 className={styles.tasks_block_header}>Выполненные</h4>
         <button className={styles.add_task_button} onClick={() => addTask('completed')}>
           +
         </button>

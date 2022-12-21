@@ -102,13 +102,14 @@ const TaskCard: React.FC<TaskCardType> = ({
   };
 
   const downloadFiles = () => {
-    setShowFileInputMenu(state => !state);
-    dispatch(downloadFilesFromServer(taskID));
+    if(files.length) {
+      dispatch(downloadFilesFromServer(taskID));
+    }
   };
 
   const uploadFiles = () => {
+    setShowFileInputMenu(state => !state);
     if (filesRef.current?.files) {
-      setShowFileInputMenu(state => !state);
       dispatch(uploadFilesOnServer({ files: filesRef.current.files, taskID }));
     }
   };

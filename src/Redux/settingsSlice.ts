@@ -1,3 +1,4 @@
+import { RootState } from './store';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type settingsSliceType = {
@@ -20,10 +21,10 @@ export type settingsSliceType = {
 };
 
 export enum UserdataUpdateStatus {
-  WAITING = "Waiting for user data updating",
-  ERROR = "User data updating failed",
-  UPLOADING = "User data uploading to DB",
-  SUCCESS = "User data have been uploaded"
+  WAITING = 'Waiting for user data updating',
+  ERROR = 'User data updating failed',
+  UPLOADING = 'User data uploading to DB',
+  SUCCESS = 'User data have been uploaded',
 }
 
 type ErrorsType = {
@@ -60,7 +61,7 @@ const initialState: settingsSliceType = {
   passwordMatchError: false,
   passwordError: false,
   theme: 'light',
-  status: UserdataUpdateStatus.WAITING
+  status: UserdataUpdateStatus.WAITING,
 };
 
 const settingsSlice = createSlice({
@@ -119,21 +120,32 @@ const settingsSlice = createSlice({
       state.newPasswordInput = '';
       state.repeatNewPasswordInput = '';
     },
+    clearSettingErrors(state) {
+      state.avatarError = false;
+      state.nameError = false;
+      state.lastnameError = false;
+      state.emailError = false;
+      state.currentPasswordError = false;
+      state.passwordMatchError = false;
+      state.passwordError = false;
+    },
     toggleTheme(state) {
-      const theme = state.theme === "dark" ? 'light' : 'dark';
+      const theme = state.theme === 'dark' ? 'light' : 'dark';
       localStorage.setItem('theme', theme);
       state.theme = theme;
     },
     setTheme(state, action: PayloadAction<string>) {
-      const theme = action.payload
+      const theme = action.payload;
       localStorage.setItem('theme', theme);
       state.theme = theme;
     },
-    setUploadingStatus(state, action : PayloadAction<string>) {
-      state.status = action.payload
-    }
+    setUploadingStatus(state, action: PayloadAction<string>) {
+      state.status = action.payload;
+    },
   },
 });
+
+export const settingsSliceSelector = (state: RootState) => state.settingsSlice;
 
 export const {
   setNameInput,
@@ -154,6 +166,7 @@ export const {
   toggleTheme,
   setTheme,
   setUploadingStatus,
+  clearSettingErrors,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
