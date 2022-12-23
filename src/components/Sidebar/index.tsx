@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
-import { clearInputs, settingsSliceSelector, toggleTheme } from '../../Redux/settingsSlice';
+import { clearPasswordInputs, settingsSliceSelector, toggleTheme } from '../../Redux/settingsSlice';
 import { removeUser } from '../../Redux/userSlice';
 
 import styles from './Sidebar.module.scss';
@@ -72,7 +72,7 @@ const Sidebar = () => {
           <li
             onClick={() => {
               dispatch(removeUser());
-              dispatch(clearInputs());
+              dispatch(clearPasswordInputs());
             }}>
             <Link to="login" className={pathname.endsWith('login') ? styles.active : undefined}>
               <span className={styles.icon + ' ' + styles.logout_icon}></span>

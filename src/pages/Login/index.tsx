@@ -11,13 +11,10 @@ import loaderStyle from '../../App.module.scss';
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const {status} = useAppSelector(userSliceSelector);
+  const { status } = useAppSelector(userSliceSelector);
 
-  const [emailValue, setEmailValue] = React.useState<string>('');
-  const [passwordValue, setPasswordValue] = React.useState<string>('');
-
-  const emailInputRef = React.useRef<HTMLInputElement>(null);
-  const passwordInputRef = React.useRef<HTMLInputElement>(null);
+  const [email, setEmail] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
 
   const [emailError, setEmailError] = React.useState<string>('');
   const [passwordError, setPasswordError] = React.useState<string>('');
@@ -31,28 +28,26 @@ const Login = () => {
   const onSubmit = () => {
     let name = localStorage.getItem('name') as string;
     let lastname = localStorage.getItem('lastname') as string;
-    dispatch(login({ email: emailValue, password: passwordValue, name, lastname }));
+    dispatch(login({ email: email, password: password, name, lastname }));
   };
 
   const validate = () => {
-    let email = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
-      emailInputRef.current?.value as string,
+    let emailValid = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(email);
+    let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+      password,
     );
-    let password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      passwordInputRef.current?.value as string,
-    );
-    if (!email) {
-      emailInputRef.current?.value.length === 0
+    if (!emailValid) {
+      email.length === 0
         ? setEmailError('Обязательное поле')
         : setEmailError('Неправильный Email. Пример: example@mail.ru');
     }
-    if (!password) {
-      passwordInputRef.current?.value.length === 0
+    if (!passwordValid) {
+      password.length === 0
         ? setPasswordError('Обязательное поле')
         : setPasswordError(`От 8-ми символов. Включая заглавные, цифры и символы(!"'№;%:?*)`);
     }
 
-    if (email && password) {
+    if (emailValid && passwordValid) {
       onSubmit();
     }
   };
@@ -72,9 +67,8 @@ const Login = () => {
         }}>
         <h1>WomanUP todo</h1>
         <input
-          ref={emailInputRef}
-          value={emailValue}
-          onChange={() => setEmailValue(emailInputRef.current?.value as string)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           name="email"
           id="email"
@@ -83,9 +77,8 @@ const Login = () => {
         />
         <span className={styles.login_error}>{emailError}</span>
         <input
-          ref={passwordInputRef}
-          value={passwordValue}
-          onChange={() => setPasswordValue(passwordInputRef.current?.value as string)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           type="password"
           name="password"
           id="password"
@@ -97,6 +90,9 @@ const Login = () => {
         <button aria-labelledby="google" type="button" onClick={() => dispatch(googleLogin())}>
           <img src={googleIcon} alt="" />
         </button>
+        <span className={styles.login_error}>
+          {status === AuthStatus.ERROR && 'Неверный логин или пароль'}
+        </span>
         <Link to="../register">или создать аккаунт</Link>
       </form>
     </div>

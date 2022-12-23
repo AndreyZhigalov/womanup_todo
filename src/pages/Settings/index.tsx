@@ -1,193 +1,27 @@
 import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
-import { collection, doc, getDocs, updateDoc } from 'firebase/firestore/lite';
-import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { DB, storageRef, user } from '../../firebase';
-import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
 import {
-  clearInputs,
   clearSettingErrors,
-  setAvatarError,
-  setCurrentPasswordError,
-  setCurrentPasswordInput,
-  setEmailError,
-  setEmailInput,
-  setLastnameError,
-  setLastnameInput,
-  setNameError,
-  setNameInput,
-  setNewPasswordInput,
-  setPasswordMatchError,
-  setRepeatNewPasswordInput,
-  setSettingsInitialState,
   settingsSliceSelector,
-  setUploadingStatus,
   UserdataUpdateStatus,
 } from '../../Redux/settingsSlice';
-import { setEmail, setLastname, setName, setPhoto, userSliceSelector } from '../../Redux/userSlice';
+import useSettingsValidate from '../../hooks/useSettingsValidate';
 
-import avatarPlaceholder from '../../assets/avatar_placeholder.png';
+import AvatarField from './AvatarField';
+import UserDataField from './UserDataField';
+import PasswordField from './PasswordField';
 
 import styles from './Settings.module.scss';
 
 const Settings = () => {
   const dispatch = useAppDispatch();
-  const { photo, name, email, lastname, id } = useAppSelector(userSliceSelector);
-  const {
-    nameInput,
-    emailInput,
-    lastnameInput,
-    currentPasswordInput,
-    newPasswordInput,
-    repeatNewPasswordInput,
-    errors,
-    avatarError,
-    nameError,
-    lastnameError,
-    emailError,
-    currentPasswordError,
-    passwordMatchError,
-    passwordError,
-    status,
-  } = useAppSelector(settingsSliceSelector);
+  const { status } = useAppSelector(settingsSliceSelector);
 
-  const avatarRef = React.useRef<HTMLInputElement>(null);
-  const nameRef = React.useRef<HTMLInputElement>(null);
-  const lastnameRef = React.useRef<HTMLInputElement>(null);
-  const emailRef = React.useRef<HTMLInputElement>(null);
-  const currentPasswordRef = React.useRef<HTMLInputElement>(null);
-  const newPasswordRef = React.useRef<HTMLInputElement>(null);
-  const repeatNewPasswordRef = React.useRef<HTMLInputElement>(null);
-
-  const [fileChanged, setFileChanged] = React.useState<boolean>(false);
-  const [disableButton, setDisableButton] = React.useState<boolean>(false);
+  const validate = useSettingsValidate();
 
   React.useEffect(() => {
     dispatch(clearSettingErrors());
   }, []);
-
-  React.useEffect(() => {
-    if (name.length > 0) {
-      dispatch(setSettingsInitialState({ name, email, lastname }));
-    }
-  }, [name]);
-
-  React.useEffect(() => {
-    let avatar = avatarRef.current?.files?.[0];
-    (async () => {
-      if (avatar && id) {
-        setDisableButton(true);
-        dispatch(setUploadingStatus(UserdataUpdateStatus.UPLOADING));
-        const accountID = await getDocs(collection(DB, `userData/${id}/user/`)).then(
-          (res) => res.docs[0].id,
-        );
-
-        if (photo.includes('firebase') && photo !== null) {
-          const currentPhotoName = photo.split('%2F')[2].split('?')[0];
-          const deleteLink = ref(storageRef, `${id}/avatar/${currentPhotoName}`);
-          deleteObject(deleteLink);
-        }
-        const avatarLink = ref(storageRef, `${id}/avatar/${avatar.name}`);
-
-        if (avatar.size <= 3145728) {
-          dispatch(setAvatarError(false));
-          try {
-            await uploadBytes(avatarLink, avatar);
-            getDownloadURL(avatarLink).then((url) => {
-              user && updateProfile(user, { photoURL: url });
-              updateDoc(doc(DB, `userData/${id}/user/${accountID}`), {
-                photo: url,
-              });
-              dispatch(setPhoto(url));
-              dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
-            });
-          } catch (error) {
-            dispatch(setUploadingStatus(UserdataUpdateStatus.ERROR));
-            alert('Аватар не обновился');
-          }
-        } else {
-          dispatch(setAvatarError(true));
-        }
-        setDisableButton(false);
-      }
-    })();
-  }, [fileChanged]);
-
-  const validate = async () => {
-    // ВАЛИДАЦИЯ
-    let nameValid = /^[а-яёА-Яёa-zA-Z]+$/.test(nameInput as string);
-    let lastnameValid = /^[а-яёА-Яёa-zA-Z]+$/.test(lastnameInput as string);
-    let emailValid = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
-      emailRef.current?.value as string,
-    );
-    let newPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      newPasswordInput as string,
-    );
-    // ДАННЫЕ ПОЛЬЗОВАТЕЛЯ
-    const accountData = await getDocs(collection(DB, `userData/${id}/user/`)).then(
-      (res) => res.docs[0],
-    );
-    const accountID = accountData.id;
-    const pass = accountData.data().password;
-    // ОБНОВЛЕНИЕ ПАРОЛЯ
-    if (currentPasswordInput === pass) {
-      dispatch(setCurrentPasswordError(false));
-      dispatch(setUploadingStatus(UserdataUpdateStatus.UPLOADING));
-      if (newPassword && newPasswordInput === repeatNewPasswordInput) {
-        dispatch(setPasswordMatchError(false));
-        user && (await updatePassword(user, newPasswordInput));
-        updateDoc(doc(DB, `userData/${id}/user/${accountID}`), {
-          password: newPasswordInput,
-        });
-        dispatch(clearInputs());
-        dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
-      } else {
-        dispatch(setUploadingStatus(UserdataUpdateStatus.ERROR));
-        dispatch(setPasswordMatchError(true));
-      }
-    } else {
-      currentPasswordInput.length && dispatch(setCurrentPasswordError(true));
-    }
-    // ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ
-    nameValid ? dispatch(setNameError(false)) : dispatch(setNameError(true));
-    lastnameValid
-      ? dispatch(setLastnameError(false))
-      : !lastnameInput.length
-      ? dispatch(setLastnameError(false))
-      : dispatch(setLastnameError(true));
-    emailValid ? dispatch(setEmailError(false)) : dispatch(setEmailError(true));
-
-    if (nameValid && emailValid && (lastnameValid || !lastnameInput.length)) {
-      setDisableButton(true);
-      dispatch(setUploadingStatus(UserdataUpdateStatus.UPLOADING));
-
-      try {
-        updateDoc(doc(DB, `userData/${id}/user/${accountID}`), {
-          name: nameInput,
-          lastname: lastnameInput,
-          email: emailInput,
-        });
-
-        user &&
-          updateProfile(user, { displayName: `${nameInput} ${lastnameInput}` }).then(() => {
-            setDisableButton(false);
-            dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
-          });
-
-        user &&
-          updateEmail(user, emailInput).then(() => {
-            setDisableButton(false);
-            dispatch(setUploadingStatus(UserdataUpdateStatus.SUCCESS));
-          });
-          
-        dispatch(setName(nameInput));
-        dispatch(setLastname(lastnameInput));
-        dispatch(setEmail(emailInput));
-      } catch (error) {
-        dispatch(setUploadingStatus(UserdataUpdateStatus.ERROR));
-      }
-    }
-  };
 
   return (
     <section className={styles.settings}>
@@ -198,110 +32,9 @@ const Settings = () => {
           e.preventDefault();
           validate();
         }}>
-        <fieldset className={styles.avatar_wrapper}>
-          <img className={styles.avatar} src={photo || avatarPlaceholder} alt="Аватарка" />
-          <input
-            className={styles.hidden}
-            ref={avatarRef}
-            type="file"
-            name="photo"
-            id="photo"
-            accept="image/jpeg"
-            onChange={() => setFileChanged((state) => !state)}
-          />
-          <button
-            type="button"
-            disabled={disableButton}
-            className={`${styles.avatar_upload_button} ${
-              status === UserdataUpdateStatus.UPLOADING && styles.button_uploading_animation
-            }`}
-            onClick={() => avatarRef.current?.click()}>
-            Обновить
-          </button>
-          {avatarError && <span className={styles.error}>{errors.avatar}</span>}
-        </fieldset>
-        <fieldset className={styles.user_data}>
-          <label className={styles.option}>
-            Имя
-            <input
-              ref={nameRef}
-              className={styles.input}
-              type="text"
-              maxLength={40}
-              onChange={() => dispatch(setNameInput(nameRef.current?.value as string))}
-              value={nameInput}
-            />
-          </label>
-          {nameError && <span className={styles.error}>{errors.name}</span>}
-          <label className={styles.option}>
-            Фамилия
-            <input
-              ref={lastnameRef}
-              className={styles.input}
-              type="text"
-              maxLength={40}
-              onChange={() => dispatch(setLastnameInput(lastnameRef.current?.value as string))}
-              value={lastnameInput}
-            />
-          </label>
-          {lastnameError && <span className={styles.error}>{errors.lastname}</span>}
-          <label className={styles.option}>
-            Email
-            <input
-              ref={emailRef}
-              className={styles.input}
-              type="text"
-              maxLength={40}
-              onChange={() => dispatch(setEmailInput(emailRef.current?.value as string))}
-              value={emailInput}
-            />
-          </label>
-          {emailError && <span className={styles.error}>{errors.email}</span>}
-        </fieldset>
-        <fieldset className={styles.password_wrapper}>
-          <label className={styles.option}>
-            Текущий пароль
-            <input
-              ref={currentPasswordRef}
-              className={styles.input}
-              type="password"
-              maxLength={30}
-              onChange={() =>
-                dispatch(setCurrentPasswordInput(currentPasswordRef.current?.value as string))
-              }
-              value={currentPasswordInput}
-            />
-          </label>
-          {currentPasswordError && <span className={styles.error}>{errors.wrongPassword}</span>}
-          <label className={styles.option}>
-            Новый пароль
-            <input
-              ref={newPasswordRef}
-              className={styles.input}
-              type="password"
-              maxLength={30}
-              onChange={() =>
-                dispatch(setNewPasswordInput(newPasswordRef.current?.value as string))
-              }
-              value={newPasswordInput}
-            />
-          </label>
-          {passwordMatchError && <span className={styles.error}>{errors.notMatch}</span>}
-          {passwordError && <span className={styles.error}>{errors.password}</span>}
-          <label className={styles.option}>
-            Повторите новый пароль
-            <input
-              ref={repeatNewPasswordRef}
-              className={styles.input}
-              type="password"
-              maxLength={30}
-              onChange={() =>
-                dispatch(setRepeatNewPasswordInput(repeatNewPasswordRef.current?.value as string))
-              }
-              value={repeatNewPasswordInput}
-            />
-          </label>
-        </fieldset>
+        <AvatarField />
+        <UserDataField />
+        <PasswordField />
         <button
           disabled={status === UserdataUpdateStatus.UPLOADING}
           type="submit"

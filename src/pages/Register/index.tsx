@@ -11,15 +11,10 @@ const Register = () => {
   const { status } = useAppSelector(userSliceSelector);
   const navigate = useNavigate();
 
-  const [nameValue, setNameValue] = React.useState<string>('');
-  const [lastnameValue, setLastnameValue] = React.useState<string>('');
-  const [emailValue, setEmailValue] = React.useState<string>('');
-  const [passwordValue, setPasswordValue] = React.useState<string>('');
-
-  const nameInputRef = React.useRef<HTMLInputElement>(null);
-  const lastnameInputRef = React.useRef<HTMLInputElement>(null);
-  const emailInputRef = React.useRef<HTMLInputElement>(null);
-  const passwordInputRef = React.useRef<HTMLInputElement>(null);
+  const [name, setName] = React.useState<string>('');
+  const [lastname, setLastname] = React.useState<string>('');
+  const [email, setEmail] = React.useState<string>('');
+  const [password, setPassword] = React.useState<string>('');
 
   const [nameError, setNameError] = React.useState<string>('');
   const [lastnameError, setLastnameError] = React.useState<string>('');
@@ -35,46 +30,44 @@ const Register = () => {
   const onSubmit = () => {
     dispatch(
       register({
-        name: nameValue,
-        lastname: lastnameValue,
-        email: emailValue,
-        password: passwordValue,
+        name: name,
+        lastname: lastname,
+        email: email,
+        password: password,
       }),
     );
   };
 
   const validate = () => {
-    let name = /^[а-яёА-Яёa-zA-Z]+$/.test(nameInputRef.current?.value as string);
-    let lastname = /^[а-яёА-Яёa-zA-Z]+$/.test(lastnameInputRef.current?.value as string);
-    let email = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(
-      emailInputRef.current?.value as string,
-    );
-    let password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      passwordInputRef.current?.value as string,
+    let nameValid = /^[а-яёА-Яёa-zA-Z]+$/.test(name);
+    let lastnameValid = /^[а-яёА-Яёa-zA-Z]+$/.test(lastname);
+    let emailValid = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(email);
+    let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+      password,
     );
 
-    if (!name) {
-      nameInputRef.current?.value.length === 0
+    if (!nameValid) {
+      name.length === 0
         ? setNameError('Обязательное поле')
         : setNameError('Имя может содержать только буквы');
     }
-    if (!lastname) {
-      if (lastnameInputRef.current?.value && lastnameInputRef.current?.value.length > 0) {
+    if (!lastnameValid) {
+      if (lastname && lastname.length > 0) {
         setLastnameError('Фамилия может содержать только буквы');
       }
     }
-    if (!email) {
-      emailInputRef.current?.value.length === 0
+    if (!emailValid) {
+      email.length === 0
         ? setEmailError('Обязательное поле')
         : setEmailError('Неправильный Email. Пример: example@mail.ru');
     }
-    if (!password) {
-      passwordInputRef.current?.value.length === 0
+    if (!passwordValid) {
+      password.length === 0
         ? setPasswordError('Обязательное поле')
         : setPasswordError(`От 8-ми символов. Включая заглавные, цифры и символы(!"'№;%:?*)`);
     }
 
-    if (name && email && password) {
+    if (nameValid && emailValid && passwordValid) {
       onSubmit();
     }
   };
@@ -94,9 +87,8 @@ const Register = () => {
         }}>
         <h1>WomanUP todo</h1>
         <input
-          ref={nameInputRef}
-          value={nameValue}
-          onChange={() => setNameValue(nameInputRef.current?.value as string)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           type="text"
           name="name"
           id="name"
@@ -105,9 +97,8 @@ const Register = () => {
         />
         <span className={styles.register_error}>{nameError}</span>
         <input
-          ref={lastnameInputRef}
-          value={lastnameValue}
-          onChange={() => setLastnameValue(lastnameInputRef.current?.value as string)}
+          value={lastname}
+          onChange={(e) => setLastname(e.target.value)}
           type="text"
           name="lastname"
           id="lastname"
@@ -116,9 +107,8 @@ const Register = () => {
         />
         <span className={styles.register_error}>{lastnameError}</span>
         <input
-          ref={emailInputRef}
-          value={emailValue}
-          onChange={() => setEmailValue(emailInputRef.current?.value as string)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           type="email"
           name="email"
           id="email"
@@ -127,9 +117,8 @@ const Register = () => {
         />
         <span className={styles.register_error}>{emailError}</span>
         <input
-          ref={passwordInputRef}
-          value={passwordValue}
-          onChange={() => setPasswordValue(passwordInputRef.current?.value as string)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           type="password"
           name="password"
           id="password"

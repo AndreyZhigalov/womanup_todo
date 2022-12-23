@@ -11,8 +11,13 @@ import {
   updateTask,
   uploadFilesOnServer,
 } from '../../Redux/tasksSlice';
+import TaskButton from './TaskButton';
 
 import styles from './TaskCard.module.scss';
+import TaskDeadline from './TaskDeadline';
+import TaskDescription from './TaskDescription';
+import TaskFiles from './TaskFiles';
+import TaskHeader from './TaskHeader';
 
 export type TaskCardType = {
   taskData: TaskDataType;
@@ -53,11 +58,8 @@ const TaskCard: React.FC<TaskCardType> = ({
   const [dateText, setDateText] = React.useState<string | null>(deadline);
   const [showFileInputMenu, setShowFileInputMenu] = React.useState<boolean>(false);
   const TaskCardRef = React.useRef<HTMLDivElement>(null);
-  const headerRef = React.useRef<HTMLInputElement>(null);
-  const textRef = React.useRef<HTMLTextAreaElement>(null);
   const filesRef = React.useRef<HTMLInputElement>(null);
-  const dateRef = React.useRef<HTMLInputElement>(null);
-  const deadlineTimecode = new Date(dateText as string).getTime();
+
   const updatedTask = {
     ...taskObj,
     header: headerText,
@@ -72,7 +74,7 @@ const TaskCard: React.FC<TaskCardType> = ({
   React.useEffect(() => {
     const fileInputClickHandler = (e: MouseEvent) => {
       if (TaskCardRef.current && !e.composedPath().includes(TaskCardRef.current)) {
-        setShowFileInputMenu(false)
+        setShowFileInputMenu(false);
       }
     };
 
@@ -93,22 +95,16 @@ const TaskCard: React.FC<TaskCardType> = ({
 
   const onClickRemoveTask = () => {
     dispatch(removeCard(taskID));
-    dispatch(deleteTaskOnServer({taskID, files}));
-  };
-
-  const onClickFileInput = () => {
-    setShowFileInputMenu(state => !state);
-    filesRef.current?.click();
+    dispatch(deleteTaskOnServer({ taskID, files }));
   };
 
   const downloadFiles = () => {
-    if(files.length) {
+    if (files.length) {
       dispatch(downloadFilesFromServer(taskID));
     }
   };
 
   const uploadFiles = () => {
-    setShowFileInputMenu(state => !state);
     if (filesRef.current?.files) {
       dispatch(uploadFilesOnServer({ files: filesRef.current.files, taskID }));
     }
@@ -138,75 +134,41 @@ const TaskCard: React.FC<TaskCardType> = ({
       onDragEnd={setTaskToNewGroup}
       onKeyDown={(e) => e.code === 'Escape' && setIsEditable(false)}
       draggable={!isEditable}>
-      {!isEditable ? (
-        <h5 className={styles.card_header}>{headerText}</h5>
-      ) : (
-        <input
-          aria-label="input"
-          ref={headerRef}
-          className={styles.card_header}
-          readOnly={!isEditable}
-          onChange={() => setHeaderText(headerRef?.current?.value as string)}
-          value={headerText}
-        />
-      )}
-      <i
-        className={styles.attached_files + ' fa-solid fa-paperclip'}
-        onClick={() => setShowFileInputMenu((state) => !state)}>
-        {!!files.length && <span className={styles.file_count}>{files.length}</span>}
-        <input
-          type={'file'}
-          className={styles.input__hidden}
-          onChange={uploadFiles}
-          multiple
-          ref={filesRef}></input>
-        {showFileInputMenu && (
-          <div className={styles.file_input_options}>
-            <p onClick={downloadFiles}>Скачать</p>
-            <p onClick={onClickFileInput}>Добавить</p>
-          </div>
-        )}
-      </i>
-      {!isEditable ? (
-        <p className={styles.card_text}>{taskText}</p>
-      ) : (
-        <textarea
-          aria-label="input"
-          ref={textRef}
-          readOnly={!isEditable}
-          className={styles.card_text}
-          onKeyDown={(e) => e.ctrlKey && e.code === 'Enter' && onClickUpdateTask(false)}
-          onChange={() => setTaskText(textRef.current?.value as string)}
-          value={taskText}
-        />
-      )}
+      <TaskHeader
+        isEditable={isEditable}
+        text={headerText}
+        styles={styles}
+        handler={setHeaderText}
+      />
+      <TaskFiles
+        styles={styles}
+        fileNames={files}
+        refElem={filesRef}
+        uploadHandler={uploadFiles}
+        downloadHandler={downloadFiles}
+        menuToggler={() => setShowFileInputMenu((state) => !state)}
+        showMenu={showFileInputMenu}
+      />
+      <TaskDescription
+        isEditable={isEditable}
+        text={taskText}
+        styles={styles}
+        handler={setTaskText}
+        updateHandler={onClickUpdateTask}
+      />
       <div className={styles.card_readers}></div>
-      <span
-        onClick={() => dateRef?.current?.showPicker()}
-        className={`${styles.card_deadline} ${
-          deadlineTimecode < new Date().getTime() && dateText ? styles.failed : ''
-        }`}>
-        {`${dateText ?? 'Бессрочно'} `}
-        {isEditable && (
-          <i className="fa-regular fa-calendar">
-            <input
-              ref={dateRef}
-              type="date"
-              className={styles.input__hidden}
-              onChange={() => setDateText(dateRef?.current?.value as string)}
-            />
-          </i>
-        )}
-      </span>
-      {isEditable ? (
-        <i
-          onClick={() => onClickUpdateTask(false)}
-          className={styles.agree_text_change + ' fa-solid fa-check-to-slot'}></i>
-      ) : (
-        <i
-          onClick={onClickRemoveTask}
-          className={styles.remove_task + ' fa-regular fa-trash-can'}></i>
-      )}
+      <TaskDeadline
+        styles={styles}
+        date={dateText ?? 'Бессрочно'}
+        isEditable={isEditable}
+        handler={setDateText}
+      />
+      <TaskButton
+        isEditable={isEditable}
+        updateHandler={onClickUpdateTask}
+        removeHandler={onClickRemoveTask}
+        styles={styles}
+      />
     </div>
   );
 };

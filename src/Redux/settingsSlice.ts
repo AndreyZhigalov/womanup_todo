@@ -14,8 +14,8 @@ export type settingsSliceType = {
   lastnameError: boolean;
   emailError: boolean;
   currentPasswordError: boolean;
-  passwordMatchError: boolean;
-  passwordError: boolean;
+  newPasswordError: boolean;
+  repeatPasswordError: boolean;
   theme: string;
   status: string;
 };
@@ -58,8 +58,8 @@ const initialState: settingsSliceType = {
   lastnameError: false,
   emailError: false,
   currentPasswordError: false,
-  passwordMatchError: false,
-  passwordError: false,
+  newPasswordError: false,
+  repeatPasswordError: false,
   theme: 'light',
   status: UserdataUpdateStatus.WAITING,
 };
@@ -68,24 +68,29 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setNameInput(state, action: PayloadAction<string>) {
-      state.nameInput = action.payload;
-    },
-    setLastnameInput(state, action: PayloadAction<string>) {
-      state.lastnameInput = action.payload;
-    },
-    setEmailInput(state, action: PayloadAction<string>) {
-      state.emailInput = action.payload;
-    },
-    setCurrentPasswordInput(state, action: PayloadAction<string>) {
-      state.currentPasswordInput = action.payload;
-    },
-    setNewPasswordInput(state, action: PayloadAction<string>) {
-      state.newPasswordInput = action.payload;
-    },
-    setRepeatNewPasswordInput(state, action: PayloadAction<string>) {
-      state.repeatNewPasswordInput = action.payload;
-    },
+    setInputs(state, action: PayloadAction<React.ChangeEvent<HTMLInputElement>>) {
+      const target = action.payload.target;
+      switch (target.name) {
+        case 'name':
+          state.nameInput = target.value;
+          break;
+        case 'lastname':
+          state.lastnameInput = target.value;
+          break;
+        case 'email':
+          state.emailInput = target.value;
+          break;
+        case 'currentPassword':
+          state.currentPasswordInput = target.value;
+          break;
+        case 'newPassword':
+          state.newPasswordInput = target.value;
+          break;
+        case 'repeatNewPassword':
+          state.repeatNewPasswordInput = target.value;
+          break;
+      }
+    },   
     setSettingsInitialState(
       state,
       action: PayloadAction<{ name: string; email: string; lastname: string }>,
@@ -94,28 +99,32 @@ const settingsSlice = createSlice({
       state.lastnameInput = action.payload.lastname;
       state.emailInput = action.payload.email;
     },
-    setAvatarError(state, action: PayloadAction<boolean>) {
-      state.avatarError = action.payload;
+    setError(state, action: PayloadAction<string>) {
+      switch (action.payload) {
+        case 'avatar':
+          state.avatarError = !state.avatarError;
+          break;
+        case 'name':
+          state.nameError = !state.nameError;
+          break;
+        case 'lastname':
+          state.lastnameError = !state.lastnameError;
+          break;
+        case 'email':
+          state.emailError = !state.emailError;
+          break;
+        case 'current password':
+          state.currentPasswordError = !state.currentPasswordError;
+          break;
+        case 'new password':
+          state.newPasswordError = !state.newPasswordError;
+          break;
+        case 'repeat password':
+          state.repeatPasswordError = !state.repeatPasswordError;
+          break;
+      }
     },
-    setNameError(state, action: PayloadAction<boolean>) {
-      state.nameError = action.payload;
-    },
-    setLastnameError(state, action: PayloadAction<boolean>) {
-      state.lastnameError = action.payload;
-    },
-    setEmailError(state, action: PayloadAction<boolean>) {
-      state.emailError = action.payload;
-    },
-    setCurrentPasswordError(state, action: PayloadAction<boolean>) {
-      state.currentPasswordError = action.payload;
-    },
-    setPasswordMatchError(state, action: PayloadAction<boolean>) {
-      state.passwordMatchError = action.payload;
-    },
-    setPasswordError(state, action: PayloadAction<boolean>) {
-      state.passwordError = action.payload;
-    },
-    clearInputs(state) {
+    clearPasswordInputs(state) {
       state.currentPasswordInput = '';
       state.newPasswordInput = '';
       state.repeatNewPasswordInput = '';
@@ -126,8 +135,8 @@ const settingsSlice = createSlice({
       state.lastnameError = false;
       state.emailError = false;
       state.currentPasswordError = false;
-      state.passwordMatchError = false;
-      state.passwordError = false;
+      state.newPasswordError = false;
+      state.repeatPasswordError = false;
     },
     toggleTheme(state) {
       const theme = state.theme === 'dark' ? 'light' : 'dark';
@@ -148,25 +157,14 @@ const settingsSlice = createSlice({
 export const settingsSliceSelector = (state: RootState) => state.settingsSlice;
 
 export const {
-  setNameInput,
-  setLastnameInput,
-  setEmailInput,
-  setCurrentPasswordInput,
-  setNewPasswordInput,
-  setRepeatNewPasswordInput,
+  setInputs,  
   setSettingsInitialState,
-  setAvatarError,
-  setNameError,
-  setLastnameError,
-  setEmailError,
-  setCurrentPasswordError,
-  setPasswordMatchError,
-  setPasswordError,
-  clearInputs,
+  clearPasswordInputs,
   toggleTheme,
   setTheme,
   setUploadingStatus,
   clearSettingErrors,
+  setError,
 } = settingsSlice.actions;
 
 export default settingsSlice.reducer;
