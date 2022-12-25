@@ -1,14 +1,38 @@
 {
   "files": {
-    "main.css": "/womanup_todo/static/css/main.ec2380a2.css",
-    "main.js": "/womanup_todo/static/js/main.52d61401.js",
+    "main.css": "/womanup_todo/static/css/main.52d0ff5f.css",
+    "main.js": "/womanup_todo/static/js/main.34f40d5a.js",
+    "static/css/111.6e108978.chunk.css": "/womanup_todo/static/css/111.6e108978.chunk.css",
+    "static/js/111.36e84496.chunk.js": "/womanup_todo/static/js/111.36e84496.chunk.js",
+    "static/css/44.28a42b16.chunk.css": "/womanup_todo/static/css/44.28a42b16.chunk.css",
+    "static/js/44.9abab842.chunk.js": "/womanup_todo/static/js/44.9abab842.chunk.js",
+    "static/css/527.a8023b38.chunk.css": "/womanup_todo/static/css/527.a8023b38.chunk.css",
+    "static/js/527.ec59877a.chunk.js": "/womanup_todo/static/js/527.ec59877a.chunk.js",
+    "static/css/246.4172f057.chunk.css": "/womanup_todo/static/css/246.4172f057.chunk.css",
+    "static/js/246.7f54609f.chunk.js": "/womanup_todo/static/js/246.7f54609f.chunk.js",
+    "static/css/475.49dedcf3.chunk.css": "/womanup_todo/static/css/475.49dedcf3.chunk.css",
+    "static/js/475.8314e7f5.chunk.js": "/womanup_todo/static/js/475.8314e7f5.chunk.js",
+    "static/css/107.5ce94def.chunk.css": "/womanup_todo/static/css/107.5ce94def.chunk.css",
+    "static/js/107.56609d62.chunk.js": "/womanup_todo/static/js/107.56609d62.chunk.js",
     "static/media/free-icon-google-2991148.png": "/womanup_todo/static/media/free-icon-google-2991148.9db27c1011edb821b59c.png",
     "index.html": "/womanup_todo/index.html",
-    "main.ec2380a2.css.map": "/womanup_todo/static/css/main.ec2380a2.css.map",
-    "main.52d61401.js.map": "/womanup_todo/static/js/main.52d61401.js.map"
+    "main.52d0ff5f.css.map": "/womanup_todo/static/css/main.52d0ff5f.css.map",
+    "main.34f40d5a.js.map": "/womanup_todo/static/js/main.34f40d5a.js.map",
+    "111.6e108978.chunk.css.map": "/womanup_todo/static/css/111.6e108978.chunk.css.map",
+    "111.36e84496.chunk.js.map": "/womanup_todo/static/js/111.36e84496.chunk.js.map",
+    "44.28a42b16.chunk.css.map": "/womanup_todo/static/css/44.28a42b16.chunk.css.map",
+    "44.9abab842.chunk.js.map": "/womanup_todo/static/js/44.9abab842.chunk.js.map",
+    "527.a8023b38.chunk.css.map": "/womanup_todo/static/css/527.a8023b38.chunk.css.map",
+    "527.ec59877a.chunk.js.map": "/womanup_todo/static/js/527.ec59877a.chunk.js.map",
+    "246.4172f057.chunk.css.map": "/womanup_todo/static/css/246.4172f057.chunk.css.map",
+    "246.7f54609f.chunk.js.map": "/womanup_todo/static/js/246.7f54609f.chunk.js.map",
+    "475.49dedcf3.chunk.css.map": "/womanup_todo/static/css/475.49dedcf3.chunk.css.map",
+    "475.8314e7f5.chunk.js.map": "/womanup_todo/static/js/475.8314e7f5.chunk.js.map",
+    "107.5ce94def.chunk.css.map": "/womanup_todo/static/css/107.5ce94def.chunk.css.map",
+    "107.56609d62.chunk.js.map": "/womanup_todo/static/js/107.56609d62.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ec2380a2.css",
-    "static/js/main.52d61401.js"
+    "static/css/main.52d0ff5f.css",
+    "static/js/main.34f40d5a.js"
   ]
 }
