@@ -8,31 +8,31 @@
   width: 100%;
   background-color: var(--background-color);
   .wrapper {
+    padding: 30px;
     @include flexCenter('column');
     gap: 15px;
-    background-color: var(--card-block-background-color);
-    padding: 30px;
     border-radius: 10px;
+    background-color: var(--card-block-background-color);
     box-shadow: var(--box-shadow);
     h1 {
-      font-size: 36px;
       margin-bottom: 15px;
+      font-size: 36px;
     }
     input {
+      padding-left: 20px;
       height: 50px;
       width: 400px;
       box-shadow: var(--box-shadow);
       border-radius: 10px;
-      padding-left: 20px;
       font-size: 20px;
     }
     button {
       cursor: pointer;
       padding: 5px 10px;
-      font-size: 24px;
+      border-radius: 5px;
       background-color: white;
       box-shadow: var(--box-shadow);
-      border-radius: 5px;
+      font-size: 24px;
     }
     a {
       color: var(--text-color-2);
@@ -42,5 +42,5 @@
 
 .register_error {
   color: rgb(203, 0, 0);
-  font-size: 12px;
+  font-size: 14px;
 }

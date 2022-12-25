@@ -121,6 +121,7 @@ const provider = new GoogleAuthProvider();
 export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk) => {
   const dispatch = Thunk.dispatch;
   dispatch(setStatus(AuthStatus.LOADING));
+
   signInWithPopup(auth, provider)
     .then(async (result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -128,14 +129,15 @@ export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk)
       const { uid, email, displayName, photoURL } = result.user;
       const getUserData = await getDocs(collection(DB, `userData/${uid}/user`));
       const user = getUserData.docs[0]?.data();
-      const [name, lastname] = displayName?.split(/\s/) ?? ["", ""]
+      const [name, lastname] = displayName?.split(/\s/) ?? ['', ''];
+
       dispatch(
         setUser({
           id: uid,
           token: token as string,
           email: email ?? '',
           isAuth: true,
-          name: name ?? "",
+          name: name ?? '',
           lastname: lastname ?? '',
           photo: photoURL ?? '',
           status: AuthStatus.SUCCESS,
@@ -145,7 +147,7 @@ export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk)
       !user &&
         addDoc(collection(DB, `userData/${uid}/user`), {
           email,
-          password: "",
+          password: '',
           name: displayName,
           lastname: '',
           photo: photoURL,
@@ -153,9 +155,8 @@ export const googleLogin = createAsyncThunk('googleAuthStatus', async (_, Thunk)
     })
     .catch((error) => {
       dispatch(setStatus(AuthStatus.ERROR));
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode + ' ' + errorMessage);
+      console.error(error.code);
+      throw new Error(error.message);
     });
 });
 
@@ -164,9 +165,11 @@ export const register = createAsyncThunk<void, fetchUserData>(
   async ({ name, lastname, email, password }, Thunk) => {
     const dispatch = Thunk.dispatch;
     dispatch(setStatus(AuthStatus.LOADING));
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const { uid, email } = userCredential.user;
+
         addDoc(collection(DB, `userData/${uid}/user`), {
           email,
           password: password,
@@ -174,6 +177,7 @@ export const register = createAsyncThunk<void, fetchUserData>(
           lastname,
           photo: null,
         });
+
         dispatch(
           setUser({
             id: uid,
@@ -189,9 +193,8 @@ export const register = createAsyncThunk<void, fetchUserData>(
       })
       .catch((error) => {
         dispatch(setStatus(AuthStatus.ERROR));
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode + ' ' + errorMessage);
+        console.error(error.code);
+        throw new Error(error.message);
       });
   },
 );
@@ -201,6 +204,7 @@ export const login = createAsyncThunk<void, fetchUserData>(
   async ({ email, password }, Thunk) => {
     const dispatch = Thunk.dispatch;
     dispatch(setStatus(AuthStatus.LOADING));
+
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const { uid, email, refreshToken } = userCredential.user;
@@ -222,9 +226,8 @@ export const login = createAsyncThunk<void, fetchUserData>(
       })
       .catch((error) => {
         dispatch(setStatus(AuthStatus.ERROR));
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode + ' ' + errorMessage);
+        console.error(error.code);
+        throw new Error(error.message);
       });
   },
 );

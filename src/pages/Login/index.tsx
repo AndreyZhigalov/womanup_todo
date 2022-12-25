@@ -2,16 +2,19 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
 import { AuthStatus, googleLogin, login, userSliceSelector } from '../../Redux/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import useSignValidate from '../../hooks/useSignValidate';
+
+import Loader from '../../components/Loader';
 
 import googleIcon from '../../assets/free-icon-google-2991148.png';
 
 import styles from '../Login/Login.module.scss';
-import loaderStyle from '../../App.module.scss';
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { status } = useAppSelector(userSliceSelector);
+  const validate = useSignValidate();
 
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState<string>('');
@@ -31,39 +34,26 @@ const Login = () => {
     dispatch(login({ email: email, password: password, name, lastname }));
   };
 
-  const validate = () => {
-    let emailValid = /^([a-zA-Z0-9\\.\\_\\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+)$/.test(email);
-    let passwordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      password,
-    );
-    if (!emailValid) {
-      email.length === 0
-        ? setEmailError('Обязательное поле')
-        : setEmailError('Неправильный Email. Пример: example@mail.ru');
-    }
-    if (!passwordValid) {
-      password.length === 0
-        ? setPasswordError('Обязательное поле')
-        : setPasswordError(`От 8-ми символов. Включая заглавные, цифры и символы(!"'№;%:?*)`);
-    }
-
-    if (emailValid && passwordValid) {
-      onSubmit();
-    }
-  };
-
   return (
     <div className={styles.login_page}>
-      {status === AuthStatus.LOADING && (
-        <div className={loaderStyle.loading_auth__overlay}>
-          <span className={loaderStyle.loader}></span>
-        </div>
-      )}
+      {status === AuthStatus.LOADING && <Loader />}
       <form
         className={styles.wrapper}
         onSubmit={(e) => {
           e.preventDefault();
-          validate();
+          validate({
+            email,
+            password,
+            name: null,
+            lastname: null,
+            submitCallback: onSubmit,
+            errorsCallback: {
+              emailError: setEmailError,
+              passwordError: setPasswordError,
+              lastnameError: () => {},
+              nameError: () => {},
+            },
+          });
         }}>
         <h1>WomanUP todo</h1>
         <input

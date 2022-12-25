@@ -16,7 +16,7 @@ import styles from './Settings.module.scss';
 const Settings = () => {
   const dispatch = useAppDispatch();
   const { status } = useAppSelector(settingsSliceSelector);
-
+  
   const validate = useSettingsValidate();
 
   React.useEffect(() => {

@@ -3,19 +3,13 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from './hooks/storeHook';
 import { getTaskList } from './Redux/tasksSlice';
 import { getUser, userSliceSelector } from './Redux/userSlice';
+import { setTheme, settingsSliceSelector } from './Redux/settingsSlice';
 
 import MainLayout from './layouts/MainLayout';
-import Calendar from './pages/Calendar';
-import Chat from './pages/Chat';
 import Login from './pages/Login';
-import Overview from './pages/Overview';
-import Projects from './pages/Projects';
 import Register from './pages/Register';
-import Settings from './pages/Settings';
-import Stats from './pages/Stats';
 
 import styles from './App.module.scss';
-import { setTheme, settingsSliceSelector } from './Redux/settingsSlice';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -28,11 +22,11 @@ function App() {
 
   React.useEffect(() => {
     dispatch(getTaskList());
-    dispatch(getUser()); 
-    if (localTheme) dispatch(setTheme(localTheme));   
+    dispatch(getUser());
+    if (localTheme) dispatch(setTheme(localTheme));
   }, []);
 
-  React.useEffect(() => {    
+  React.useEffect(() => {
     if (!isAuth) {
       navigate('login');
     }
@@ -44,20 +38,11 @@ function App() {
 
   return (
     <div className={styles.App} data-theme={theme}>
-      <Routes>
-        <Route path="" element={<MainLayout />}>
-          <Route path="" element={<Overview />} />
-          <Route path="overview" element={<Overview />} />
-          <Route path="stats" element={<Stats />} />
-          <Route path="projects" element={<Projects />} />
-          <Route path="chat" element={<Chat />} />
-          <Route path="calendar" element={<Calendar />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="*" element={<h1>NOT FOUND 404</h1>} />
-        </Route>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-      </Routes>
+        <Routes>
+          <Route path="/*" element={<MainLayout />}/>               
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
     </div>
   );
 }

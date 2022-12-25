@@ -20,12 +20,12 @@
   .current_tasks_block,
   .future_tasks_block,
   .completed_tasks_block {
+    padding: 15px;
     @include flexStart('column');  
+    gap: 15px;
     height: 100%;
     background: var(--card-block-background-color);
     border-radius: 20px;
-    padding: 15px;
-    gap: 15px;
     .tasks_block_header {
       font-size: 20px;
       color: var(--text-color-2);
@@ -49,6 +49,7 @@
 }
 
 .dots_bars {
+  position: relative;
   margin: auto;
   margin-bottom: 5px;
   width: 40px;
@@ -58,17 +59,16 @@
   background: var(--c) 0 100%, var(--c) 50% 100%, var(--c) 100% 100%;
   background-size: 8px calc(100% - 4px);
   background-repeat: no-repeat;
-  position: relative;
 }
 .dots_bars:before {
   content: '';
   position: absolute;
+  left: 0;
+  top: 0;
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: currentColor;
-  left: 0;
-  top: 0;
   animation: db3_1 1.5s linear infinite alternate,
     db3_2 0.75s cubic-bezier(0, 200, 0.8, 200) infinite;
 }

@@ -9,7 +9,7 @@ import {
   QuerySnapshot,
   updateDoc,
 } from 'firebase/firestore/lite';
-import { deleteObject,  getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { DB } from '../firebase';
 import { storageRef } from './../firebase/index';
 import { RootState } from './store';
@@ -109,12 +109,12 @@ const tasksSlice = createSlice({
       alert('Ошибка при создании новой задачи');
     });
     builder.addCase(getTaskList.pending, (state) => {
-      state.status = FetchTaskListStatus.LOADING
+      state.status = FetchTaskListStatus.LOADING;
     });
     builder.addCase(
       getTaskList.fulfilled,
       (state, action: PayloadAction<QuerySnapshot<DocumentData>>) => {
-        state.status = FetchTaskListStatus.SUCCESS
+        state.status = FetchTaskListStatus.SUCCESS;
         const tasks = [];
         for (let value of action.payload.docs) {
           tasks.push(value.data() as TaskDataType);
@@ -170,16 +170,16 @@ export const updateTask = createAsyncThunk<TaskDataType, TaskDataType>(
   },
 );
 
-export const deleteTaskOnServer = createAsyncThunk<void, {taskID: string, files: string[]}>(
+export const deleteTaskOnServer = createAsyncThunk<void, { taskID: string; files: string[] }>(
   'deleteTaskOnStatus',
-  async ({taskID, files}) => {
+  async ({ taskID, files }) => {
     const id = localStorage.getItem('userId');
     try {
       await deleteDoc(doc(DB, `userData/${id}/taskList/${taskID}`));
       if (id) {
         const userLink = ref(storageRef, id);
         const taskLink = ref(userLink, taskID);
-        for(let value of files) {
+        for (let value of files) {
           const fileLink = ref(taskLink, value);
           deleteObject(fileLink);
         }
@@ -216,7 +216,7 @@ export const uploadFilesOnServer = createAsyncThunk<void, UploadFilesType>(
       }
     }
     if (updatedTask) {
-      Thunk.dispatch(updateTask({ ...updatedTask, files: [...updatedTask.files , ...filesNames] }));
+      Thunk.dispatch(updateTask({ ...updatedTask, files: [...updatedTask.files, ...filesNames] }));
       Thunk.dispatch(updateCard({ ...updatedTask, files: [...updatedTask.files, ...filesNames] }));
     }
   },
@@ -249,7 +249,7 @@ export const downloadFilesFromServer = createAsyncThunk<void, string>(
   },
 );
 
-export const taskListSelector = (state: RootState) => state.tasksSlice
+export const taskListSelector = (state: RootState) => state.tasksSlice;
 
 export const { addNewCard, clearAllTasks, removeCard, setTaskGroup, updateCard } =
   tasksSlice.actions;

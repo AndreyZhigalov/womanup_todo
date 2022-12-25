@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHook';
 import { setInputs, settingsSliceSelector } from '../../../Redux/settingsSlice';
 

@@ -39,9 +39,9 @@
         &::before {
           content: '';
           position: absolute;
+          top: 2px;
           height: 19px;
           width: 19px;
-          top: 2px;
           border-radius: 50%;
           background-color: var(--text-color);
           transform: translateX(2px);
@@ -65,8 +65,8 @@
 
     li {
       position: relative;
-      font-size: 20px;
       padding-left: 30px;
+      font-size: 20px;
       color: var(--text-unactive-color);
       i {
         margin-right: 10px;

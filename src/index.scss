@@ -1,15 +1,14 @@
-@import "./services.scss";
+@import './services.scss';
 
 * {
   box-sizing: border-box;
-  text-decoration: none;
+  padding: 0;
+  margin: 0;
   outline: none;
   border: none;
-  margin: 0;
-  padding: 0;
+  text-decoration: none;
   list-style: none;
   font-family: 'Philosopher', sans-serif;
- 
 }
 
 html {
@@ -23,15 +22,19 @@ body {
   width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
 }
 
 #root {
   height: 100%;
-  width: 100%;  
+  width: 100%;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
 }
 

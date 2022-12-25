@@ -83,6 +83,6 @@ const Sidebar = () => {
       </nav>
     </section>
   );
-};
+}
 
 export default Sidebar;
