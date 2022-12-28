@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunktodo_woman_up=self.webpackChunktodo_woman_up||[]).push([[246],{3246:function(e,n,t){t.r(n),t.d(n,{default:function(){return c}});t(2791);var o="Projects_projects__NnIe2",u=t(184),c=function(){return(0,u.jsx)("div",{className:o,children:"Projects"})}}}]);
-//# sourceMappingURL=246.7f54609f.chunk.js.map

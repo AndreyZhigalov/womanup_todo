@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunktodo_woman_up=self.webpackChunktodo_woman_up||[]).push([[44],{44:function(n,a,t){t.r(a),t.d(a,{default:function(){return o}});t(2791);var c={container:"Chat_container__wmL1T"},e=t(184),o=function(n){var a=n.showMenu;return(0,e.jsx)("div",{className:"".concat(c.chat," ").concat(c.container),"data-menu":a,children:"Chat"})}}}]);
+//# sourceMappingURL=44.4f94f4b6.chunk.js.map

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunktodo_woman_up=self.webpackChunktodo_woman_up||[]).push([[107],{7107:function(n,t,a){a.r(t),a.d(t,{default:function(){return o}});a(2791);var c={container:"Stats_container__Lfcdd"},e=a(184),o=function(n){var t=n.showMenu;return(0,e.jsx)("div",{className:"".concat(c.stats," ").concat(c.container),"data-menu":t,children:"Stats"})}}}]);
+//# sourceMappingURL=107.5775062c.chunk.js.map
