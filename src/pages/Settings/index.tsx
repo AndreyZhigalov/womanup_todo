@@ -13,10 +13,10 @@ import PasswordField from './PasswordField';
 
 import styles from './Settings.module.scss';
 
-const Settings = () => {
+const Settings: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
   const dispatch = useAppDispatch();
   const { status } = useAppSelector(settingsSliceSelector);
-  
+
   const validate = useSettingsValidate();
 
   React.useEffect(() => {
@@ -24,7 +24,7 @@ const Settings = () => {
   }, []);
 
   return (
-    <section className={styles.settings}>
+    <section className={`${styles.settings} ${styles.container}`} data-menu={showMenu}>
       <h2 className={styles.header}>Настройки профиля</h2>
       <form
         className={styles.form}

@@ -1,0 +1,94 @@
+@import '../../services.scss';
+
+.tabs {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  .tabs {
+    @include flexBetween('row');
+    height: 40px;
+    .tab {
+      cursor: pointer;
+      @include flexCenter('row');
+      width: 100%;
+      height: 100%;
+      font-size: 24px;
+      border-radius: 0 0 10px 10px;
+      background-color: var(--card-block-background-color);
+      box-shadow: 0px 5px 0 var(--card-add-background-color);
+    }
+    button {
+      display: none;
+      height: 40px;
+      width: 40px;
+      font-size: 24px;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: 440px) {
+  .tabs {
+    .arrows {
+      @include flexCenter('row');
+      min-width: 40px;
+      min-height: 40px;
+      background-color: var(--card-block-background-color);
+      box-shadow: 0px 5px 0 var(--card-add-background-color);
+
+      &:first-of-type {
+        border-radius: 5px 0 0 5px;
+      }
+      &:last-of-type {
+        border-radius: 0 5px 5px 0;
+      }
+      button {
+        display: block;
+      }
+    }
+    &[data-tab-group='1'] {
+      .tab {
+        &:nth-of-type(2) {
+          display: flex;
+        }
+        &:nth-of-type(3) {
+          display: none;
+        }
+        &:nth-of-type(4) {
+          display: none;
+        }
+      }
+    }
+    &[data-tab-group='2'] {
+      .tab {
+        &:nth-of-type(2) {
+          display: none;
+        }
+        &:nth-of-type(3) {
+          display: flex;
+        }
+        &:nth-of-type(4) {
+          display: none;
+        }
+      }
+    }
+    &[data-tab-group='3'] {
+      .tab {
+        &:nth-of-type(2) {
+          display: none;
+        }
+        &:nth-of-type(3) {
+          display: none;
+        }
+        &:nth-of-type(4) {
+          display: flex;
+        }
+      }
+    }
+    .tab {
+      border-radius: 0;
+    }
+  }
+}

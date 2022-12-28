@@ -1,7 +1,7 @@
 @import '../../services.scss';
 
 .sidebar {
-  z-index: 9990;
+  z-index: 9991;
   position: fixed;
   padding: 20px 10px 20px 30px;
   display: flex;
@@ -17,6 +17,42 @@
     color: var(--text-color);
     span {
       font-size: 16px;
+    }
+  }
+  .switcher {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: -70px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid var(--button-color-active);
+    background-color: var(--button-color);
+    transition: right 0.3s ease-in-out;
+    [data-line='top'] {
+      position: absolute;
+      top: 7px;
+      left: 5px;
+      width: 28px;
+      height: 4px;
+      background-color: var(--button-color-active);
+    }
+    [data-line='middle'] {
+      position: absolute;
+      top: calc(50% - 2px);
+      left: 5px;
+      width: 28px;
+      height: 4px;
+      background-color: var(--button-color-active);
+    }
+    [data-line='bottom'] {
+      position: absolute;
+      bottom: 7px;
+      left: 5px;
+      width: 28px;
+      height: 4px;
+      background-color: var(--button-color-active);
     }
   }
   .nav_panel {
@@ -82,7 +118,6 @@
           object-fit: contain;
           background-size: contain;
           background: unset center center no-repeat;
-          
         }
         .home_icon {
           background-image: url(../../assets/icons/home.png);
@@ -115,5 +150,43 @@
 [data-theme='dark'] {
   .icon {
     filter: invert(94%) sepia(0%) saturate(4815%) hue-rotate(157deg) brightness(130%) contrast(90%);
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    &[data-menu='false'] {
+      filter: blur(0);
+      transform: translateX(-240px);
+      transition: transform 0.3s ease-in-out;
+    }
+    &[data-menu='true'] {
+      filter: blur(0);
+      transform: translateX(0px);
+      transition: transform 0.3s ease-in-out;
+      .switcher {
+        right: -50px;
+      }
+    }
+    .switcher {
+      display: block;
+
+      [data-line='top'] {
+      }
+      [data-line='middle'] {
+      }
+      [data-line='bottom'] {
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    &[data-menu='false'] {
+      .switcher {
+        right: -55px;
+      }
+    }
   }
 }

@@ -20,8 +20,7 @@ function App() {
 
   const localTheme = localStorage.getItem('theme');
 
-  React.useEffect(() => {
-    dispatch(getTaskList());
+  React.useEffect(() => {    
     dispatch(getUser());
     if (localTheme) dispatch(setTheme(localTheme));
   }, []);
@@ -31,6 +30,7 @@ function App() {
       navigate('login');
     }
     if (isAuth) {
+      dispatch(getTaskList());
       const path = location.pathname.match(/\/[a-z]+$/)?.[0].substring(1);
       return path === 'register' || path === 'login' ? navigate('overview') : navigate(path ?? '');
     }

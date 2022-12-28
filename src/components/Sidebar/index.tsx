@@ -5,16 +5,23 @@ import { removeUser } from '../../Redux/userSlice';
 
 import styles from './Sidebar.module.scss';
 
-const Sidebar = () => {
+const Sidebar: React.FC<{ setShowMenu: React.Dispatch<React.SetStateAction<boolean>>, showMenu: boolean }> = ({
+  setShowMenu, showMenu
+}) => {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const { theme } = useAppSelector(settingsSliceSelector);
 
   return (
-    <section className={styles.sidebar}>
+    <section className={styles.sidebar} data-menu={showMenu}>
       <h1 className={styles.logo}>
         WomanUP <span>todo</span>
       </h1>
+      <button className={styles.switcher} onClick={() => setShowMenu((value) => !value)}>
+        <div data-line="top"></div>
+        <div data-line="middle"></div>
+        <div data-line="bottom"></div>
+      </button>
       <nav className={styles.nav_panel}>
         <ul>
           <li>
@@ -83,6 +90,6 @@ const Sidebar = () => {
       </nav>
     </section>
   );
-}
+};
 
 export default Sidebar;

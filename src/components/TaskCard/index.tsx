@@ -33,7 +33,7 @@ const TaskCard: React.FC<TaskCardType> = ({
     deadline,
     readers,
     isCurrent,
-    isFuture,
+    isInQueue,
     isCompleted,
     files,
   },
@@ -49,7 +49,7 @@ const TaskCard: React.FC<TaskCardType> = ({
     deadline,
     readers,
     isCurrent,
-    isFuture,
+    isInQueue,
     isCompleted,
     files,
   };
@@ -57,7 +57,7 @@ const TaskCard: React.FC<TaskCardType> = ({
   const [taskText, setTaskText] = React.useState<string>(text);
   const [dateText, setDateText] = React.useState<string | null>(deadline);
   const [showFileInputMenu, setShowFileInputMenu] = React.useState<boolean>(false);
-  const TaskCardRef = React.useRef<HTMLDivElement>(null);
+  const TaskCardRef = React.useRef<HTMLLIElement>(null);
   const filesRef = React.useRef<HTMLInputElement>(null);
 
   const updatedTask = {
@@ -67,7 +67,7 @@ const TaskCard: React.FC<TaskCardType> = ({
     editable: false,
     deadline: dateText,
     isCurrent,
-    isFuture,
+    isInQueue,
     isCompleted,
   };
 
@@ -116,16 +116,20 @@ const TaskCard: React.FC<TaskCardType> = ({
       updateTask({
         ...updatedTask,
         isCurrent: droppedGroup === 'current' ? true : false,
-        isFuture: droppedGroup === 'future' ? true : false,
+        isInQueue: droppedGroup === 'inQueue' ? true : false,
         isCompleted: droppedGroup === 'completed' ? true : false,
       }),
     );
   };
 
+  let timer: NodeJS.Timeout;
+
   return (
-    <div
+    <li
       ref={TaskCardRef}
       className={styles.task_card}
+      onTouchStart={() => (timer = setTimeout(() => onClickUpdateTask(true), 500))}
+      onTouchEnd={() => clearTimeout(timer)}
       onDoubleClick={() => onClickUpdateTask(true)}
       onDragStart={(e) => {
         e.dataTransfer.dropEffect = 'move';
@@ -169,7 +173,7 @@ const TaskCard: React.FC<TaskCardType> = ({
         removeHandler={onClickRemoveTask}
         styles={styles}
       />
-    </div>
+    </li>
   );
 };
 

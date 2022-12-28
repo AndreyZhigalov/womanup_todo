@@ -23,7 +23,7 @@ export type TaskDataType = {
   editable: boolean;
   deadline: string | null;
   isCurrent: boolean;
-  isFuture: boolean;
+  isInQueue: boolean;
   isCompleted: boolean;
 };
 
@@ -63,7 +63,7 @@ const tasksSlice = createSlice({
         editable: true,
         deadline: null,
         isCurrent: false,
-        isFuture: false,
+        isInQueue: false,
         isCompleted: false,
       };
       state.taskList = [
@@ -71,7 +71,7 @@ const tasksSlice = createSlice({
         {
           ...newTask,
           isCurrent: action.payload === 'current' ? true : false,
-          isFuture: action.payload === 'future' ? true : false,
+          isInQueue: action.payload === 'inQueue' ? true : false,
           isCompleted: action.payload === 'completed' ? true : false,
         },
       ];
@@ -88,7 +88,7 @@ const tasksSlice = createSlice({
           ? {
               ...item,
               isCurrent: action.payload[1] === 'current' ? true : false,
-              isFuture: action.payload[1] === 'future' ? true : false,
+              isInQueue: action.payload[1] === 'inQueue' ? true : false,
               isCompleted: action.payload[1] === 'completed' ? true : false,
             }
           : item,

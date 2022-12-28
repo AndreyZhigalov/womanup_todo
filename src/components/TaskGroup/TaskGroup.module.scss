@@ -1,0 +1,70 @@
+@import '../../services.scss';
+
+.current_tasks_block,
+.inQueue_tasks_block,
+.completed_tasks_block {
+  padding: 15px;
+  @include flexStart('column');
+  gap: 15px;
+  height: 100%;
+  background: var(--card-block-background-color);
+  border-radius: 20px;
+  .tasks_block_header {
+    font-size: 20px;
+    color: var(--text-color-2);
+  }
+  .add_task_button {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    background: var(--card-add-background-color);
+    font-size: 35px;
+    line-height: 20px;
+    color: var(--text-color);
+    &:active {
+      transform: scale(95%);
+    }
+    &:hover {
+      background: var(--card-add-hover-color);
+    }
+  }
+}
+
+@media (max-width: 820px) {
+  [data-tab-group='1'] {
+    &.current_tasks_block {
+      display: flex;
+    }
+    &.inQueue_tasks_block {
+      display: none;
+    }
+    &.completed_tasks_block {
+      display: none;
+    }
+  }
+
+  [data-tab-group='2'] {
+    &.current_tasks_block {
+      display: none;
+    }
+    &.inQueue_tasks_block {
+      display: flex;
+    }
+    &.completed_tasks_block {
+      display: none;
+    }
+  }
+
+  [data-tab-group='3'] {
+    &.current_tasks_block {
+      display: none;
+    }
+    &.inQueue_tasks_block {
+      display: none;
+    }
+    &.completed_tasks_block {
+      display: flex;
+    }
+  }
+}
+

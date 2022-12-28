@@ -8,15 +8,15 @@ import avatarPlaceholder from '../../assets/avatar_placeholder.png';
 
 import styles from './Header.module.scss';
 
-const Header = () => {
+const Header: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
   const dispatch = useAppDispatch();
   const input = useAppSelector((state) => state.searchSlice.input);
   const { name, lastname, photo } = useAppSelector(userSliceSelector);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const params = useParams();
-  
+
   return (
-    <header className={styles.header}>
+    <header className={styles.header} data-menu={showMenu}>
       {(params['*']?.startsWith('overview') || !params['*']) && (
         <div className={styles.search_block}>
           <i className={styles.search_icon + ' fa-solid fa-magnifying-glass'}></i>
@@ -42,7 +42,6 @@ const Header = () => {
         </div>
         <img src={photo || avatarPlaceholder} alt="" className={styles.avatar} />
       </div>
-     
     </header>
   );
 };

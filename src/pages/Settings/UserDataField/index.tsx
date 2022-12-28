@@ -7,7 +7,7 @@ import {
 } from '../../../Redux/settingsSlice';
 import { userSliceSelector } from '../../../Redux/userSlice';
 
-import styles from './UserDataField.module.scss';
+import styles from '../Settings.module.scss';
 
 const UserDataField = () => {
   const dispatch = useAppDispatch();

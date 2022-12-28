@@ -7,8 +7,8 @@
   @include flexBetween('row');
   justify-self: flex-end;
   width: calc(100% - 240px);
-  min-width: calc(1024px - 240px);
   height: max-content;
+  min-height: 50px;
   grid-area: header;
   color: var(--text-color);
   background-color: var(--header-color);
@@ -57,6 +57,42 @@
       object-fit: cover;
       border-radius: 50%;
       cursor: pointer;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 10px 30px 10px 80px;
+    width: 100%;
+    .user_block {
+      .avatar {
+        width: 25px;
+        height: 25px;
+      }
+    }
+  }
+}
+
+@media (max-width: 590px) {
+  .header {
+    padding: 10px 15px;
+    width: 100%;
+    .search_block {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    padding: 10px 15px;
+    width: 100%;
+    .user_block {
+      .questions,
+      .notice {
+        display: none;
+      }
     }
   }
 }

@@ -1,16 +1,21 @@
 import React from 'react';
-import TaskCard from '../../components/TaskCard';
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHook';
-
-import { addNewCard, addNewTask, AddTaskStatus, FetchTaskListStatus, taskListSelector } from '../../Redux/tasksSlice';
+import TaskGroup from '../../components/TaskGroup';
+import TaskGroupTabs from '../../components/TaskGroupTabs';
+import { useAppDispatch, useAppSelector } from '../../hooks/storeHook';
+import {
+  addNewTask,
+  AddTaskStatus,
+  FetchTaskListStatus,
+  taskListSelector,
+} from '../../Redux/tasksSlice';
 
 import styles from './Overview.module.scss';
 
-const Overview = () => {
+const Overview: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
   const dispatch = useAppDispatch();
   const { taskList, status } = useAppSelector(taskListSelector);
-  const { input } = useAppSelector((state) => state.searchSlice);
-  const [droppedGroup, setDroppedGroup] = React.useState<string>();
+  const [droppedGroup, setDroppedGroup] = React.useState<string>('');
+  const [tabGroup, setTabGroup] = React.useState<number>(1);
 
   React.useEffect(() => {
     if (status === AddTaskStatus.ADDED) {
@@ -18,14 +23,9 @@ const Overview = () => {
     }
   }, [status]);
 
-  const addTask = (type: string) => {
-    if (status === AddTaskStatus.WAITING || status === FetchTaskListStatus.SUCCESS)
-      dispatch(addNewCard(type));
-  };
-
   if (status === FetchTaskListStatus.LOADING) {
     return (
-      <section className={styles.overview}>
+      <section className={`${styles.overview} ${styles.container}`}>
         <div className={styles.loading_wrapper}>
           <div className={styles.dots_bars}></div>
           <span className={styles.loading_message}>Загрузка списка задач</span>
@@ -34,65 +34,59 @@ const Overview = () => {
     );
   }
 
+  const onDragOverTab = (group: string, e: React.DragEvent<HTMLLIElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.effectAllowed = 'move';
+    setDroppedGroup(group);
+  };
+
+  const onDragOverDropArea = (group: string, e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    e.dataTransfer.effectAllowed = 'move';
+    setDroppedGroup(group);
+  };
+
   return (
-    <section className={styles.overview} >
-      <div
-        className={styles.current_tasks_block}
-        onDragOverCapture={(e) => {
-          e.preventDefault();
-          setDroppedGroup('current');
-        }}>
-        <h4 className={styles.tasks_block_header}>Текущие</h4>
-        <button className={styles.add_task_button} onClick={() => addTask('current')}>
-          +
-        </button>
-        {taskList
-          .filter((item) => item.header.toLowerCase().includes(input?.toLowerCase()))
-          .map((task) =>
-            task.isCurrent ? (
-              <TaskCard key={task.taskID} taskData={task} droppedGroup={droppedGroup} />
-            ) : null,
-          )
-          .reverse()}
-      </div>
-      <div
-        className={styles.future_tasks_block}
-        onDragOverCapture={(e) => {
-          e.preventDefault();
-          setDroppedGroup('future');
-        }}>
-        <h4 className={styles.tasks_block_header}>В очереди</h4>
-        <button className={styles.add_task_button} onClick={() => addTask('future')}>
-          +
-        </button>
-        {taskList
-          .filter((item) => item.header.toLowerCase().includes(input?.toLowerCase()))
-          .map((task) =>
-            task.isFuture ? (
-              <TaskCard key={task.taskID} taskData={task} droppedGroup={droppedGroup} />
-            ) : null,
-          )
-          .reverse()}
-      </div>
-      <div
-        className={styles.completed_tasks_block}
-        onDragOverCapture={(e) => {
-          e.preventDefault();
-          setDroppedGroup('completed');
-        }}>
-        <h4 className={styles.tasks_block_header}>Выполненные</h4>
-        <button className={styles.add_task_button} onClick={() => addTask('completed')}>
-          +
-        </button>
-        {taskList
-          .filter((item) => item.header.toLowerCase().includes(input?.toLowerCase()))
-          .map((task) =>
-            task.isCompleted ? (
-              <TaskCard key={task.taskID} taskData={task} droppedGroup={droppedGroup} />
-            ) : null,
-          )
-          .reverse()}
-      </div>
+    <section className={`${styles.overview} ${styles.container}`} data-menu={showMenu}>
+      <TaskGroupTabs tabGroup={tabGroup} setTabGroup={setTabGroup} onDragOverTab={onDragOverTab} />
+      {/* {tabGroup !== 1 && (
+        <div       
+          onDragOverCapture={(e) =>
+            onDragOverDropArea(`${tabGroup === 2 ? 'current' : 'inQueue'}`, e)
+          }
+          className={styles.dropArea_prev}>
+          {tabGroup === 2 ? 'Текущие' : 'В очереди'}
+        </div>
+      )}
+      {tabGroup !== 3 && (
+        <div
+          onDragOverCapture={(e) =>
+            onDragOverDropArea(`${tabGroup === 2 ? 'completed' : 'inQueue'}`, e)
+          }
+          className={styles.dropArea_next}>
+          {tabGroup === 2 ? 'Выполненные' : 'В очереди'}
+        </div>
+      )} */}
+      <TaskGroup
+        tabGroup={tabGroup}
+        currentGroup={'current'}
+        setDroppedGroup={setDroppedGroup}
+        droppedGroup={droppedGroup}
+      />
+      <TaskGroup
+        tabGroup={tabGroup}
+        currentGroup={'inQueue'}
+        setDroppedGroup={setDroppedGroup}
+        droppedGroup={droppedGroup}
+      />
+      <TaskGroup
+        tabGroup={tabGroup}
+        currentGroup={'completed'}
+        setDroppedGroup={setDroppedGroup}
+        droppedGroup={droppedGroup}
+      />
     </section>
   );
 };

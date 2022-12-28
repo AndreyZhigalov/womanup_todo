@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/storeHook';
 import { setInputs, settingsSliceSelector } from '../../../Redux/settingsSlice';
 
-import styles from './PasswordField.module.scss';
+import styles from '../Settings.module.scss';
 
 const PasswordField = () => {
   const dispatch = useAppDispatch();
