@@ -10,6 +10,7 @@ import {
 } from '../../Redux/tasksSlice';
 
 import styles from './Overview.module.scss';
+import DropArea from '../../components/DropArea';
 
 const Overview: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
   const dispatch = useAppDispatch();
@@ -34,41 +35,14 @@ const Overview: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
     );
   }
 
-  const onDragOverTab = (group: string, e: React.DragEvent<HTMLLIElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    e.dataTransfer.effectAllowed = 'move';
-    setDroppedGroup(group);
-  };
-
-  const onDragOverDropArea = (group: string, e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-    e.dataTransfer.effectAllowed = 'move';
-    setDroppedGroup(group);
-  };
-
   return (
     <section className={`${styles.overview} ${styles.container}`} data-menu={showMenu}>
-      <TaskGroupTabs tabGroup={tabGroup} setTabGroup={setTabGroup} onDragOverTab={onDragOverTab} />
-      {/* {tabGroup !== 1 && (
-        <div       
-          onDragOverCapture={(e) =>
-            onDragOverDropArea(`${tabGroup === 2 ? 'current' : 'inQueue'}`, e)
-          }
-          className={styles.dropArea_prev}>
-          {tabGroup === 2 ? 'Текущие' : 'В очереди'}
-        </div>
-      )}
-      {tabGroup !== 3 && (
-        <div
-          onDragOverCapture={(e) =>
-            onDragOverDropArea(`${tabGroup === 2 ? 'completed' : 'inQueue'}`, e)
-          }
-          className={styles.dropArea_next}>
-          {tabGroup === 2 ? 'Выполненные' : 'В очереди'}
-        </div>
-      )} */}
+      <TaskGroupTabs
+        tabGroup={tabGroup}
+        setTabGroup={setTabGroup}
+        onDragOverTab={setDroppedGroup}
+      />
+      <DropArea tabGroup={tabGroup} onDragOver={setDroppedGroup} />
       <TaskGroup
         tabGroup={tabGroup}
         currentGroup={'current'}

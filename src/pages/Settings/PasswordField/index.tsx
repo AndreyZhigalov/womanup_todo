@@ -24,7 +24,9 @@ const PasswordField = () => {
           type="password"
           name="currentPassword"
           maxLength={30}
-          onChange={(event) => dispatch(setInputs(event))}
+          onChange={(event) =>
+            dispatch(setInputs({ name: event.target.name, value: event.target.value }))
+          }
           value={currentPasswordInput}
         />
       </label>
@@ -36,7 +38,9 @@ const PasswordField = () => {
           type="password"
           name="newPassword"
           maxLength={30}
-          onChange={(event) => dispatch(setInputs(event))}
+          onChange={(event) =>
+            dispatch(setInputs({ name: event.target.name, value: event.target.value }))
+          }
           value={newPasswordInput}
         />
       </label>
@@ -49,7 +53,9 @@ const PasswordField = () => {
           type="password"
           name="repeatNewPassword"
           maxLength={30}
-          onChange={(event) => dispatch(setInputs(event))}
+          onChange={(event) =>
+            dispatch(setInputs({ name: event.target.name, value: event.target.value }))
+          }
           value={repeatNewPasswordInput}
         />
       </label>

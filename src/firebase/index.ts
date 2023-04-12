@@ -3,10 +3,7 @@ import {
   getAuth,
   onAuthStateChanged,
   setPersistence,
-  signInWithEmailAndPassword,
-  browserSessionPersistence,
   browserLocalPersistence,
-  updatePassword,
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore/lite';
 import { getStorage, ref } from 'firebase/storage';

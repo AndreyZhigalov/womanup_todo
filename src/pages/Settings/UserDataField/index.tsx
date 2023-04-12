@@ -30,7 +30,9 @@ const UserDataField = () => {
           type="text"
           name="name"
           maxLength={40}
-          onChange={(event) => dispatch(setInputs(event))}
+          onChange={(event) =>
+            dispatch(setInputs({ name: event.target.name, value: event.target.value }))
+          }
           value={nameInput}
         />
       </label>
@@ -42,7 +44,9 @@ const UserDataField = () => {
           type="text"
           name="lastname"
           maxLength={40}
-          onChange={(event) => dispatch(setInputs(event))}
+          onChange={(event) =>
+            dispatch(setInputs({ name: event.target.name, value: event.target.value }))
+          }
           value={lastnameInput}
         />
       </label>
@@ -54,7 +58,9 @@ const UserDataField = () => {
           type="text"
           name="email"
           maxLength={40}
-          onChange={(event) => dispatch(setInputs(event))}
+          onChange={(event) =>
+            dispatch(setInputs({ name: event.target.name, value: event.target.value }))
+          }
           value={emailInput}
         />
       </label>

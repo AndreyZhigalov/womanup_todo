@@ -14,6 +14,7 @@
     color: var(--text-color-2);
   }
   .add_task_button {
+    user-select: none;
     width: 100%;
     height: 30px;
     border-radius: 10px;

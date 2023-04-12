@@ -113,13 +113,9 @@ const tasksSlice = createSlice({
     });
     builder.addCase(
       getTaskList.fulfilled,
-      (state, action: PayloadAction<QuerySnapshot<DocumentData>>) => {
+      (state, action: PayloadAction<DocumentData[]>) => {
         state.status = FetchTaskListStatus.SUCCESS;
-        const tasks = [];
-        for (let value of action.payload.docs) {
-          tasks.push(value.data() as TaskDataType);
-        }
-        state.taskList = tasks;
+        state.taskList = action.payload as TaskDataType[];
       },
     );
     builder.addCase(getTaskList.rejected, (state) => {
@@ -139,12 +135,13 @@ const tasksSlice = createSlice({
   },
 });
 
-export const getTaskList = createAsyncThunk<QuerySnapshot<DocumentData>>(
+export const getTaskList = createAsyncThunk<DocumentData[]>(
   'getTaskListStatus',
   async () => {
     const id = localStorage.getItem('userId');
     const querySnapshot = await getDocs(collection(DB, `userData/${id}/taskList`));
-    return querySnapshot;
+    const data = querySnapshot.docs.map(doc => doc.data())
+    return data;
   },
 );
 
@@ -239,6 +236,7 @@ export const downloadFilesFromServer = createAsyncThunk<void, string>(
         for (let value of task?.files) {
           let fileLink = ref(taskLink, value);
           getDownloadURL(fileLink).then((url) => {
+            alert(url);
             let a = document.createElement('a');
             Object.assign(a, { download: '', href: url, target: '_blank' });
             a.click();

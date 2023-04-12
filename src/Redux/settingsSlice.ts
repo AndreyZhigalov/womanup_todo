@@ -68,29 +68,30 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setInputs(state, action: PayloadAction<React.ChangeEvent<HTMLInputElement>>) {
-      const target = action.payload.target;
-      switch (target.name) {
+    setInputs(state, action: PayloadAction<{ name: string; value: string }>) {
+      const name = action.payload.name;
+      const value = action.payload.value;
+      switch (name) {
         case 'name':
-          state.nameInput = target.value;
+          state.nameInput = value;
           break;
         case 'lastname':
-          state.lastnameInput = target.value;
+          state.lastnameInput = value;
           break;
         case 'email':
-          state.emailInput = target.value;
+          state.emailInput = value;
           break;
         case 'currentPassword':
-          state.currentPasswordInput = target.value;
+          state.currentPasswordInput = value;
           break;
         case 'newPassword':
-          state.newPasswordInput = target.value;
+          state.newPasswordInput = value;
           break;
         case 'repeatNewPassword':
-          state.repeatNewPasswordInput = target.value;
+          state.repeatNewPasswordInput = value;
           break;
       }
-    },   
+    },
     setSettingsInitialState(
       state,
       action: PayloadAction<{ name: string; email: string; lastname: string }>,

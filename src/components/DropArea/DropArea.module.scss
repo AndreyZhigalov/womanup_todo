@@ -1,0 +1,30 @@
+@import '../../services.scss';
+
+.dropArea_prev,
+.dropArea_next {
+  z-index: 9990;
+  position: absolute;
+  top: 40px;
+  @include flexCenter('row');
+  display: none;
+  width: 50%;
+  height: calc(100% - 40px);
+  font-size: 24px;
+  border-radius: 5px;
+  border: 2px solid var(--card-add-background-color);
+}
+.dropArea_prev {
+  left: 0;
+  background-color: var(--card-block-background-color);
+}
+.dropArea_next {
+  right: 0;
+  background-color: var(--card-block-background-color);
+}
+
+@media (max-width: 440px) {
+  .dropArea_prev,
+  .dropArea_next {
+    display: flex;
+  }
+}

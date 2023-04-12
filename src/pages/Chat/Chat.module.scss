@@ -1,5 +1,92 @@
-@import "../../services.scss";
+@import '../../services.scss';
 
+html {
+  overflow: hidden;
+}
+.container {
+  padding: 0;
+}
 .chat {
-
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  color: var(--text-color);
+  .rooms_container {
+    padding: 10px;
+    min-width: 300px;
+    max-width: 300px;
+    background-color: var(--background-color);
+  }
+  .rooms_list {
+    width: 100%;
+    background-color: var(--background-color);
+  }
+  .room {
+    padding: 5px 10px;
+    background-color: var(--body-background);
+  }
+  .room_name {
+    font-size: 20px;
+  }
+  .last_message {
+    font-size: 16px;
+  }
+  .messages_container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 50px;
+    width: 100%;
+  }
+  .messages_list {
+    padding: 20px;
+  }
+  .message {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: 20px 20px 1fr;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+  .message_avatar {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .message_name {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    padding-left: 10px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .message_text {
+    grid-column: 2 / 3;
+    grid-row: 2 / 4;
+    padding-left: 10px;
+    margin-top: 10px;
+    font-size: 20px;
+  }
+  .send_form {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: var(--background-color);
+  }
+  .message_input {
+    height: 100%;
+    width: 100%;
+    resize: none;
+    padding: 5px 10px;
+    font-size: 20px;
+    &::-webkit-slider-thumb {
+      display: none;
+    }
+  }
+  .send_button {
+    width: 150px;
+    font-size: 20px;
+  }
 }

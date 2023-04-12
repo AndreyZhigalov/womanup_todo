@@ -121,6 +121,10 @@ const TaskCard: React.FC<TaskCardType> = ({
       }),
     );
   };
+  const onTouchGrabbing = (e: React.TouchEvent<HTMLLIElement>) => {
+    e.currentTarget.style.top = `${e.touches[0].pageY - e.currentTarget.clientHeight}px`;
+    e.currentTarget.style.left = `${e.touches[0].pageX - e.currentTarget.clientWidth / 2}px`;
+  };
 
   let timer: NodeJS.Timeout;
 
@@ -128,8 +132,14 @@ const TaskCard: React.FC<TaskCardType> = ({
     <li
       ref={TaskCardRef}
       className={styles.task_card}
-      onTouchStart={() => (timer = setTimeout(() => onClickUpdateTask(true), 500))}
-      onTouchEnd={() => clearTimeout(timer)}
+      onTouchStart={(e) => {
+        timer = setTimeout(() => TaskCardRef.current?.classList.add(styles.grabbing), 300);
+      }}
+      onTouchMove={onTouchGrabbing}
+      onTouchEnd={() => {
+        clearTimeout(timer);
+        TaskCardRef.current?.classList.remove(styles.grabbing);
+      }}
       onDoubleClick={() => onClickUpdateTask(true)}
       onDragStart={(e) => {
         e.dataTransfer.dropEffect = 'move';
